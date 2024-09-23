@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/wtl/codefield/opencv_test/build",
+  "command": "/usr/bin/c++   -I/home/wtl/codefield/opencv_test/./include/camera -I/home/wtl/codefield/opencv_test/./include/armor -I/home/wtl/codefield/opencv_test/./include/thread -I/home/wtl/codefield/opencv_test/./include/tools -isystem /usr/local/include/opencv4  -g   -o CMakeFiles/test.dir/src/main.cpp.o -c /home/wtl/codefield/opencv_test/src/main.cpp",
+  "file": "/home/wtl/codefield/opencv_test/src/main.cpp"
+}
+]
