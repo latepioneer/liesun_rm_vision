@@ -57,9 +57,87 @@ include CMakeFiles/test.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/test.dir/flags.make
 
+CMakeFiles/test.dir/src/camera/camera.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/camera/camera.cpp.o: ../src/camera/camera.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test.dir/src/camera/camera.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/camera/camera.cpp.o -c /home/wtl/codefield/opencv_test/src/camera/camera.cpp
+
+CMakeFiles/test.dir/src/camera/camera.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/camera/camera.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wtl/codefield/opencv_test/src/camera/camera.cpp > CMakeFiles/test.dir/src/camera/camera.cpp.i
+
+CMakeFiles/test.dir/src/camera/camera.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/camera/camera.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/camera/camera.cpp -o CMakeFiles/test.dir/src/camera/camera.cpp.s
+
+CMakeFiles/test.dir/src/armor/armorbox.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/armor/armorbox.cpp.o: ../src/armor/armorbox.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/test.dir/src/armor/armorbox.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/armor/armorbox.cpp.o -c /home/wtl/codefield/opencv_test/src/armor/armorbox.cpp
+
+CMakeFiles/test.dir/src/armor/armorbox.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/armor/armorbox.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wtl/codefield/opencv_test/src/armor/armorbox.cpp > CMakeFiles/test.dir/src/armor/armorbox.cpp.i
+
+CMakeFiles/test.dir/src/armor/armorbox.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/armor/armorbox.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/armor/armorbox.cpp -o CMakeFiles/test.dir/src/armor/armorbox.cpp.s
+
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: ../src/armor/armordetector.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test.dir/src/armor/armordetector.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/armor/armordetector.cpp.o -c /home/wtl/codefield/opencv_test/src/armor/armordetector.cpp
+
+CMakeFiles/test.dir/src/armor/armordetector.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/armor/armordetector.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wtl/codefield/opencv_test/src/armor/armordetector.cpp > CMakeFiles/test.dir/src/armor/armordetector.cpp.i
+
+CMakeFiles/test.dir/src/armor/armordetector.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/armor/armordetector.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/armor/armordetector.cpp -o CMakeFiles/test.dir/src/armor/armordetector.cpp.s
+
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: ../src/thread/my_thread.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test.dir/src/thread/my_thread.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/thread/my_thread.cpp.o -c /home/wtl/codefield/opencv_test/src/thread/my_thread.cpp
+
+CMakeFiles/test.dir/src/thread/my_thread.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/thread/my_thread.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wtl/codefield/opencv_test/src/thread/my_thread.cpp > CMakeFiles/test.dir/src/thread/my_thread.cpp.i
+
+CMakeFiles/test.dir/src/thread/my_thread.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/thread/my_thread.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/thread/my_thread.cpp -o CMakeFiles/test.dir/src/thread/my_thread.cpp.s
+
+CMakeFiles/test.dir/src/tools/predictor.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/tools/predictor.cpp.o: ../src/tools/predictor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test.dir/src/tools/predictor.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/tools/predictor.cpp.o -c /home/wtl/codefield/opencv_test/src/tools/predictor.cpp
+
+CMakeFiles/test.dir/src/tools/predictor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/tools/predictor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wtl/codefield/opencv_test/src/tools/predictor.cpp > CMakeFiles/test.dir/src/tools/predictor.cpp.i
+
+CMakeFiles/test.dir/src/tools/predictor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/tools/predictor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/tools/predictor.cpp -o CMakeFiles/test.dir/src/tools/predictor.cpp.s
+
+CMakeFiles/test.dir/src/tools/uart.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/tools/uart.cpp.o: ../src/tools/uart.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/src/tools/uart.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/tools/uart.cpp.o -c /home/wtl/codefield/opencv_test/src/tools/uart.cpp
+
+CMakeFiles/test.dir/src/tools/uart.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/tools/uart.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wtl/codefield/opencv_test/src/tools/uart.cpp > CMakeFiles/test.dir/src/tools/uart.cpp.i
+
+CMakeFiles/test.dir/src/tools/uart.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/tools/uart.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/tools/uart.cpp -o CMakeFiles/test.dir/src/tools/uart.cpp.s
+
 CMakeFiles/test.dir/src/main.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/main.cpp.o -c /home/wtl/codefield/opencv_test/src/main.cpp
 
 CMakeFiles/test.dir/src/main.cpp.i: cmake_force
@@ -72,11 +150,23 @@ CMakeFiles/test.dir/src/main.cpp.s: cmake_force
 
 # Object files for target test
 test_OBJECTS = \
+"CMakeFiles/test.dir/src/camera/camera.cpp.o" \
+"CMakeFiles/test.dir/src/armor/armorbox.cpp.o" \
+"CMakeFiles/test.dir/src/armor/armordetector.cpp.o" \
+"CMakeFiles/test.dir/src/thread/my_thread.cpp.o" \
+"CMakeFiles/test.dir/src/tools/predictor.cpp.o" \
+"CMakeFiles/test.dir/src/tools/uart.cpp.o" \
 "CMakeFiles/test.dir/src/main.cpp.o"
 
 # External object files for target test
 test_EXTERNAL_OBJECTS =
 
+test: CMakeFiles/test.dir/src/camera/camera.cpp.o
+test: CMakeFiles/test.dir/src/armor/armorbox.cpp.o
+test: CMakeFiles/test.dir/src/armor/armordetector.cpp.o
+test: CMakeFiles/test.dir/src/thread/my_thread.cpp.o
+test: CMakeFiles/test.dir/src/tools/predictor.cpp.o
+test: CMakeFiles/test.dir/src/tools/uart.cpp.o
 test: CMakeFiles/test.dir/src/main.cpp.o
 test: CMakeFiles/test.dir/build.make
 test: /usr/local/lib/libopencv_gapi.so.4.10.0
@@ -133,7 +223,7 @@ test: /usr/local/lib/libopencv_photo.so.4.10.0
 test: /usr/local/lib/libopencv_imgproc.so.4.10.0
 test: /usr/local/lib/libopencv_core.so.4.10.0
 test: CMakeFiles/test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

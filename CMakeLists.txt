@@ -22,7 +22,7 @@ aux_source_directory(src/tools SRC_LIST3)
 set(TOTAL_LIST ${SRC_LIST} ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} src/main.cpp)
 
 # 创建可执行文件
-add_executable(test src/main.cpp)
+add_executable(test ${TOTAL_LIST})  # 使用 TOTAL_LIST 作为源文件
 
 # 链接 OpenCV 库和 pthread 库
 target_link_libraries(test ${OpenCV_LIBS} pthread)

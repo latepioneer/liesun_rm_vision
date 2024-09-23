@@ -1,7 +1,6 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include "my_thread.h"
-#include "uart.h"
 using namespace std;
 using namespace cv;
 

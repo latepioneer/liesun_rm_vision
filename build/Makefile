@@ -123,6 +123,87 @@ test/fast:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
 .PHONY : test/fast
 
+src/armor/armorbox.o: src/armor/armorbox.cpp.o
+
+.PHONY : src/armor/armorbox.o
+
+# target to build an object file
+src/armor/armorbox.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/armor/armorbox.cpp.o
+.PHONY : src/armor/armorbox.cpp.o
+
+src/armor/armorbox.i: src/armor/armorbox.cpp.i
+
+.PHONY : src/armor/armorbox.i
+
+# target to preprocess a source file
+src/armor/armorbox.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/armor/armorbox.cpp.i
+.PHONY : src/armor/armorbox.cpp.i
+
+src/armor/armorbox.s: src/armor/armorbox.cpp.s
+
+.PHONY : src/armor/armorbox.s
+
+# target to generate assembly for a file
+src/armor/armorbox.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/armor/armorbox.cpp.s
+.PHONY : src/armor/armorbox.cpp.s
+
+src/armor/armordetector.o: src/armor/armordetector.cpp.o
+
+.PHONY : src/armor/armordetector.o
+
+# target to build an object file
+src/armor/armordetector.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/armor/armordetector.cpp.o
+.PHONY : src/armor/armordetector.cpp.o
+
+src/armor/armordetector.i: src/armor/armordetector.cpp.i
+
+.PHONY : src/armor/armordetector.i
+
+# target to preprocess a source file
+src/armor/armordetector.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/armor/armordetector.cpp.i
+.PHONY : src/armor/armordetector.cpp.i
+
+src/armor/armordetector.s: src/armor/armordetector.cpp.s
+
+.PHONY : src/armor/armordetector.s
+
+# target to generate assembly for a file
+src/armor/armordetector.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/armor/armordetector.cpp.s
+.PHONY : src/armor/armordetector.cpp.s
+
+src/camera/camera.o: src/camera/camera.cpp.o
+
+.PHONY : src/camera/camera.o
+
+# target to build an object file
+src/camera/camera.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/camera/camera.cpp.o
+.PHONY : src/camera/camera.cpp.o
+
+src/camera/camera.i: src/camera/camera.cpp.i
+
+.PHONY : src/camera/camera.i
+
+# target to preprocess a source file
+src/camera/camera.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/camera/camera.cpp.i
+.PHONY : src/camera/camera.cpp.i
+
+src/camera/camera.s: src/camera/camera.cpp.s
+
+.PHONY : src/camera/camera.s
+
+# target to generate assembly for a file
+src/camera/camera.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/camera/camera.cpp.s
+.PHONY : src/camera/camera.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -150,6 +231,87 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/thread/my_thread.o: src/thread/my_thread.cpp.o
+
+.PHONY : src/thread/my_thread.o
+
+# target to build an object file
+src/thread/my_thread.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/thread/my_thread.cpp.o
+.PHONY : src/thread/my_thread.cpp.o
+
+src/thread/my_thread.i: src/thread/my_thread.cpp.i
+
+.PHONY : src/thread/my_thread.i
+
+# target to preprocess a source file
+src/thread/my_thread.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/thread/my_thread.cpp.i
+.PHONY : src/thread/my_thread.cpp.i
+
+src/thread/my_thread.s: src/thread/my_thread.cpp.s
+
+.PHONY : src/thread/my_thread.s
+
+# target to generate assembly for a file
+src/thread/my_thread.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/thread/my_thread.cpp.s
+.PHONY : src/thread/my_thread.cpp.s
+
+src/tools/predictor.o: src/tools/predictor.cpp.o
+
+.PHONY : src/tools/predictor.o
+
+# target to build an object file
+src/tools/predictor.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/predictor.cpp.o
+.PHONY : src/tools/predictor.cpp.o
+
+src/tools/predictor.i: src/tools/predictor.cpp.i
+
+.PHONY : src/tools/predictor.i
+
+# target to preprocess a source file
+src/tools/predictor.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/predictor.cpp.i
+.PHONY : src/tools/predictor.cpp.i
+
+src/tools/predictor.s: src/tools/predictor.cpp.s
+
+.PHONY : src/tools/predictor.s
+
+# target to generate assembly for a file
+src/tools/predictor.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/predictor.cpp.s
+.PHONY : src/tools/predictor.cpp.s
+
+src/tools/uart.o: src/tools/uart.cpp.o
+
+.PHONY : src/tools/uart.o
+
+# target to build an object file
+src/tools/uart.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/uart.cpp.o
+.PHONY : src/tools/uart.cpp.o
+
+src/tools/uart.i: src/tools/uart.cpp.i
+
+.PHONY : src/tools/uart.i
+
+# target to preprocess a source file
+src/tools/uart.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/uart.cpp.i
+.PHONY : src/tools/uart.cpp.i
+
+src/tools/uart.s: src/tools/uart.cpp.s
+
+.PHONY : src/tools/uart.s
+
+# target to generate assembly for a file
+src/tools/uart.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/uart.cpp.s
+.PHONY : src/tools/uart.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -159,9 +321,27 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
+	@echo "... src/armor/armorbox.o"
+	@echo "... src/armor/armorbox.i"
+	@echo "... src/armor/armorbox.s"
+	@echo "... src/armor/armordetector.o"
+	@echo "... src/armor/armordetector.i"
+	@echo "... src/armor/armordetector.s"
+	@echo "... src/camera/camera.o"
+	@echo "... src/camera/camera.i"
+	@echo "... src/camera/camera.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/thread/my_thread.o"
+	@echo "... src/thread/my_thread.i"
+	@echo "... src/thread/my_thread.s"
+	@echo "... src/tools/predictor.o"
+	@echo "... src/tools/predictor.i"
+	@echo "... src/tools/predictor.s"
+	@echo "... src/tools/uart.o"
+	@echo "... src/tools/uart.i"
+	@echo "... src/tools/uart.s"
 .PHONY : help
 
 
