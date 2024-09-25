@@ -20,6 +20,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   ".././include/armor"
   ".././include/thread"
   ".././include/tools"
+  "/opt/MVS/include"
   "/usr/local/include/opencv4"
   )
 

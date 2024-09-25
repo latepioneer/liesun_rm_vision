@@ -27,8 +27,8 @@ camera.h
 ../include/armor/camera.h
 
 ../include/camera/camera.h
-iostream
--
+MvCameraControl.h
+../include/camera/MvCameraControl.h
 opencv2/opencv.hpp
 -
 
@@ -96,13 +96,39 @@ iostream
 my_thread.h
 /home/wtl/codefield/opencv_test/src/my_thread.h
 
-/home/wtl/codefield/opencv_test/src/thread/my_thread.cpp
-my_thread.h
-/home/wtl/codefield/opencv_test/src/thread/my_thread.h
+/opt/MVS/include/CameraParams.h
+PixelType.h
+/opt/MVS/include/PixelType.h
 
-/home/wtl/codefield/opencv_test/src/tools/uart.cpp
-uart.h
-/home/wtl/codefield/opencv_test/src/tools/uart.h
+/opt/MVS/include/MvCameraControl.h
+MvErrorDefine.h
+/opt/MVS/include/MvErrorDefine.h
+CameraParams.h
+/opt/MVS/include/CameraParams.h
+MvObsoleteInterfaces.h
+/opt/MVS/include/MvObsoleteInterfaces.h
+
+/opt/MVS/include/MvErrorDefine.h
+MvISPErrorDefine.h
+/opt/MVS/include/MvISPErrorDefine.h
+
+/opt/MVS/include/MvISPErrorDefine.h
+
+/opt/MVS/include/MvObsoleteInterfaces.h
+MvErrorDefine.h
+/opt/MVS/include/MvErrorDefine.h
+CameraParams.h
+/opt/MVS/include/CameraParams.h
+ObsoleteCamParams.h
+/opt/MVS/include/ObsoleteCamParams.h
+
+/opt/MVS/include/ObsoleteCamParams.h
+PixelType.h
+/opt/MVS/include/PixelType.h
+
+/opt/MVS/include/PixelType.h
+stdint.h
+-
 
 /usr/local/include/opencv4/opencv2/calib3d.hpp
 opencv2/core.hpp

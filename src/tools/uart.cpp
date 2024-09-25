@@ -75,17 +75,6 @@ int comm_service::commSet(int baudrate, int flow_ctrl, int databits, int stopbit
         }
     }
 
-    // if (!isStandard)
-    // {
-    //     // 非标准波特率
-    //     int res = serial_set_speci_baud(options, baudrate);
-    //     if (res != 0)
-    //     {
-    //         LError("commSet serial_set_speci_baud error.");
-    //         return (FALSE);
-    //     }
-    // }
-
     // 修改控制模式，保证程序不会占用串口
     options.c_cflag |= CLOCAL;
     // 修改控制模式，使得能够从串口中读取输入数据

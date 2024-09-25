@@ -135,7 +135,7 @@ cv::Point3f ArmorDetector::pnp(ArmorBox armor)
     }
     cv::Mat rvec = cv::Mat::zeros(3, 1, CV_64FC1);
     cv::Mat tvec = cv::Mat::zeros(3, 1, CV_64FC1);
-    solvePnP(Points3D, armor.points, Camera::cameraMatrix, Camera::distCoeffs, rvec, tvec, false, cv::SOLVEPNP_AP3P);
+    solvePnP(Points3D, armor.points, Camera().cameraMatrix, Camera().distCoeffs, rvec, tvec, false, cv::SOLVEPNP_AP3P);
     // myData<float> data((float)tvec.ptr<double>(0)[0], (float)tvec.ptr<double>(0)[1], (float)tvec.ptr<double>(0)[2]);
     cv::Point3f points((float)tvec.ptr<double>(0)[0], (float)tvec.ptr<double>(0)[1], (float)tvec.ptr<double>(0)[2]);
     return points;

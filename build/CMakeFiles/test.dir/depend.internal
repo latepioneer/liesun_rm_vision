@@ -122,6 +122,13 @@ CMakeFiles/test.dir/src/armor/armordetector.cpp.o
  ../include/armor/armordetector.h
  ../include/camera/camera.h
  /home/wtl/codefield/opencv_test/src/armor/armordetector.cpp
+ /opt/MVS/include/CameraParams.h
+ /opt/MVS/include/MvCameraControl.h
+ /opt/MVS/include/MvErrorDefine.h
+ /opt/MVS/include/MvISPErrorDefine.h
+ /opt/MVS/include/MvObsoleteInterfaces.h
+ /opt/MVS/include/ObsoleteCamParams.h
+ /opt/MVS/include/PixelType.h
  /usr/local/include/opencv4/opencv2/calib3d.hpp
  /usr/local/include/opencv4/opencv2/core.hpp
  /usr/local/include/opencv4/opencv2/core/affine.hpp
@@ -238,6 +245,13 @@ CMakeFiles/test.dir/src/armor/armordetector.cpp.o
 CMakeFiles/test.dir/src/camera/camera.cpp.o
  ../include/camera/camera.h
  /home/wtl/codefield/opencv_test/src/camera/camera.cpp
+ /opt/MVS/include/CameraParams.h
+ /opt/MVS/include/MvCameraControl.h
+ /opt/MVS/include/MvErrorDefine.h
+ /opt/MVS/include/MvISPErrorDefine.h
+ /opt/MVS/include/MvObsoleteInterfaces.h
+ /opt/MVS/include/ObsoleteCamParams.h
+ /opt/MVS/include/PixelType.h
  /usr/local/include/opencv4/opencv2/calib3d.hpp
  /usr/local/include/opencv4/opencv2/core.hpp
  /usr/local/include/opencv4/opencv2/core/affine.hpp
@@ -359,6 +373,13 @@ CMakeFiles/test.dir/src/main.cpp.o
  ../include/tools/predictor.h
  ../include/tools/uart.h
  /home/wtl/codefield/opencv_test/src/main.cpp
+ /opt/MVS/include/CameraParams.h
+ /opt/MVS/include/MvCameraControl.h
+ /opt/MVS/include/MvErrorDefine.h
+ /opt/MVS/include/MvISPErrorDefine.h
+ /opt/MVS/include/MvObsoleteInterfaces.h
+ /opt/MVS/include/ObsoleteCamParams.h
+ /opt/MVS/include/PixelType.h
  /usr/local/include/opencv4/opencv2/calib3d.hpp
  /usr/local/include/opencv4/opencv2/core.hpp
  /usr/local/include/opencv4/opencv2/core/affine.hpp
@@ -480,6 +501,13 @@ CMakeFiles/test.dir/src/thread/my_thread.cpp.o
  ../include/tools/predictor.h
  ../include/tools/uart.h
  /home/wtl/codefield/opencv_test/src/thread/my_thread.cpp
+ /opt/MVS/include/CameraParams.h
+ /opt/MVS/include/MvCameraControl.h
+ /opt/MVS/include/MvErrorDefine.h
+ /opt/MVS/include/MvISPErrorDefine.h
+ /opt/MVS/include/MvObsoleteInterfaces.h
+ /opt/MVS/include/ObsoleteCamParams.h
+ /opt/MVS/include/PixelType.h
  /usr/local/include/opencv4/opencv2/calib3d.hpp
  /usr/local/include/opencv4/opencv2/core.hpp
  /usr/local/include/opencv4/opencv2/core/affine.hpp

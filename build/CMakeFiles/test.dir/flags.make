@@ -6,5 +6,5 @@ CXX_FLAGS = -g
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/wtl/codefield/opencv_test/./include/camera -I/home/wtl/codefield/opencv_test/./include/armor -I/home/wtl/codefield/opencv_test/./include/thread -I/home/wtl/codefield/opencv_test/./include/tools -isystem /usr/local/include/opencv4 
+CXX_INCLUDES = -I/home/wtl/codefield/opencv_test/./include/camera -I/home/wtl/codefield/opencv_test/./include/armor -I/home/wtl/codefield/opencv_test/./include/thread -I/home/wtl/codefield/opencv_test/./include/tools -I/opt/MVS/include -isystem /usr/local/include/opencv4 
 

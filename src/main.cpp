@@ -4,6 +4,12 @@
 using namespace std;
 using namespace cv;
 
+class data
+{
+    char src[13];
+    unsigned char crc;
+} teat_data;
+
 int main()
 {
     Task task;
@@ -14,7 +20,14 @@ int main()
 
     pool.enqueue([&task]
                  { task.get_armor_task(); });
+    /*
+    comm_service com;
+    com.CommOpen("/dev/ttyACM0");
+    com.CommInit(115200, 0, 8, 1, 'N');
+    cout << "1";
+    char src[16] = {0};
+    com.CommRecv(src, 100);
+    cout << (unsigned int)src[11];*/
 
-    
     return 0;
 }

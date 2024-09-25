@@ -11,6 +11,7 @@ include_directories(./include/camera)
 include_directories(./include/armor)
 include_directories(./include/thread)
 include_directories(./include/tools)
+include_directories(/opt/MVS/include)
 
 # 设置源文件目录
 aux_source_directory(src/camera SRC_LIST)
@@ -25,4 +26,5 @@ set(TOTAL_LIST ${SRC_LIST} ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} src/main.cpp)
 add_executable(test ${TOTAL_LIST})  # 使用 TOTAL_LIST 作为源文件
 
 # 链接 OpenCV 库和 pthread 库
-target_link_libraries(test ${OpenCV_LIBS} pthread)
+target_link_libraries(test ${OpenCV_LIBS} pthread /opt/MVS/lib/64/libMvCameraControl.so)
+

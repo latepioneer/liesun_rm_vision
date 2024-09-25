@@ -121,6 +121,13 @@ CMakeFiles/test.dir/src/armor/armordetector.cpp.o: ../include/armor/armorbox.h
 CMakeFiles/test.dir/src/armor/armordetector.cpp.o: ../include/armor/armordetector.h
 CMakeFiles/test.dir/src/armor/armordetector.cpp.o: ../include/camera/camera.h
 CMakeFiles/test.dir/src/armor/armordetector.cpp.o: ../src/armor/armordetector.cpp
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /opt/MVS/include/CameraParams.h
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /opt/MVS/include/MvCameraControl.h
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /opt/MVS/include/MvErrorDefine.h
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /opt/MVS/include/MvISPErrorDefine.h
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /opt/MVS/include/MvObsoleteInterfaces.h
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /opt/MVS/include/ObsoleteCamParams.h
+CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /opt/MVS/include/PixelType.h
 CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /usr/local/include/opencv4/opencv2/calib3d.hpp
 CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /usr/local/include/opencv4/opencv2/core.hpp
 CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /usr/local/include/opencv4/opencv2/core/affine.hpp
@@ -237,6 +244,13 @@ CMakeFiles/test.dir/src/armor/armordetector.cpp.o: /usr/local/include/opencv4/op
 
 CMakeFiles/test.dir/src/camera/camera.cpp.o: ../include/camera/camera.h
 CMakeFiles/test.dir/src/camera/camera.cpp.o: ../src/camera/camera.cpp
+CMakeFiles/test.dir/src/camera/camera.cpp.o: /opt/MVS/include/CameraParams.h
+CMakeFiles/test.dir/src/camera/camera.cpp.o: /opt/MVS/include/MvCameraControl.h
+CMakeFiles/test.dir/src/camera/camera.cpp.o: /opt/MVS/include/MvErrorDefine.h
+CMakeFiles/test.dir/src/camera/camera.cpp.o: /opt/MVS/include/MvISPErrorDefine.h
+CMakeFiles/test.dir/src/camera/camera.cpp.o: /opt/MVS/include/MvObsoleteInterfaces.h
+CMakeFiles/test.dir/src/camera/camera.cpp.o: /opt/MVS/include/ObsoleteCamParams.h
+CMakeFiles/test.dir/src/camera/camera.cpp.o: /opt/MVS/include/PixelType.h
 CMakeFiles/test.dir/src/camera/camera.cpp.o: /usr/local/include/opencv4/opencv2/calib3d.hpp
 CMakeFiles/test.dir/src/camera/camera.cpp.o: /usr/local/include/opencv4/opencv2/core.hpp
 CMakeFiles/test.dir/src/camera/camera.cpp.o: /usr/local/include/opencv4/opencv2/core/affine.hpp
@@ -358,6 +372,13 @@ CMakeFiles/test.dir/src/main.cpp.o: ../include/thread/my_thread.h
 CMakeFiles/test.dir/src/main.cpp.o: ../include/tools/predictor.h
 CMakeFiles/test.dir/src/main.cpp.o: ../include/tools/uart.h
 CMakeFiles/test.dir/src/main.cpp.o: ../src/main.cpp
+CMakeFiles/test.dir/src/main.cpp.o: /opt/MVS/include/CameraParams.h
+CMakeFiles/test.dir/src/main.cpp.o: /opt/MVS/include/MvCameraControl.h
+CMakeFiles/test.dir/src/main.cpp.o: /opt/MVS/include/MvErrorDefine.h
+CMakeFiles/test.dir/src/main.cpp.o: /opt/MVS/include/MvISPErrorDefine.h
+CMakeFiles/test.dir/src/main.cpp.o: /opt/MVS/include/MvObsoleteInterfaces.h
+CMakeFiles/test.dir/src/main.cpp.o: /opt/MVS/include/ObsoleteCamParams.h
+CMakeFiles/test.dir/src/main.cpp.o: /opt/MVS/include/PixelType.h
 CMakeFiles/test.dir/src/main.cpp.o: /usr/local/include/opencv4/opencv2/calib3d.hpp
 CMakeFiles/test.dir/src/main.cpp.o: /usr/local/include/opencv4/opencv2/core.hpp
 CMakeFiles/test.dir/src/main.cpp.o: /usr/local/include/opencv4/opencv2/core/affine.hpp
@@ -479,6 +500,13 @@ CMakeFiles/test.dir/src/thread/my_thread.cpp.o: ../include/thread/my_thread.h
 CMakeFiles/test.dir/src/thread/my_thread.cpp.o: ../include/tools/predictor.h
 CMakeFiles/test.dir/src/thread/my_thread.cpp.o: ../include/tools/uart.h
 CMakeFiles/test.dir/src/thread/my_thread.cpp.o: ../src/thread/my_thread.cpp
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /opt/MVS/include/CameraParams.h
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /opt/MVS/include/MvCameraControl.h
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /opt/MVS/include/MvErrorDefine.h
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /opt/MVS/include/MvISPErrorDefine.h
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /opt/MVS/include/MvObsoleteInterfaces.h
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /opt/MVS/include/ObsoleteCamParams.h
+CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /opt/MVS/include/PixelType.h
 CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /usr/local/include/opencv4/opencv2/calib3d.hpp
 CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /usr/local/include/opencv4/opencv2/core.hpp
 CMakeFiles/test.dir/src/thread/my_thread.cpp.o: /usr/local/include/opencv4/opencv2/core/affine.hpp

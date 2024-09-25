@@ -202,6 +202,7 @@ test: /usr/local/lib/libopencv_wechat_qrcode.so.4.10.0
 test: /usr/local/lib/libopencv_xfeatures2d.so.4.10.0
 test: /usr/local/lib/libopencv_xobjdetect.so.4.10.0
 test: /usr/local/lib/libopencv_xphoto.so.4.10.0
+test: /opt/MVS/lib/64/libMvCameraControl.so
 test: /usr/local/lib/libopencv_shape.so.4.10.0
 test: /usr/local/lib/libopencv_highgui.so.4.10.0
 test: /usr/local/lib/libopencv_datasets.so.4.10.0
