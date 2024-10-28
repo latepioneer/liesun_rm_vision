@@ -258,6 +258,33 @@ src/thread/my_thread.cpp.s:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/thread/my_thread.cpp.s
 .PHONY : src/thread/my_thread.cpp.s
 
+src/tools/Mat_time.o: src/tools/Mat_time.cpp.o
+
+.PHONY : src/tools/Mat_time.o
+
+# target to build an object file
+src/tools/Mat_time.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/Mat_time.cpp.o
+.PHONY : src/tools/Mat_time.cpp.o
+
+src/tools/Mat_time.i: src/tools/Mat_time.cpp.i
+
+.PHONY : src/tools/Mat_time.i
+
+# target to preprocess a source file
+src/tools/Mat_time.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/Mat_time.cpp.i
+.PHONY : src/tools/Mat_time.cpp.i
+
+src/tools/Mat_time.s: src/tools/Mat_time.cpp.s
+
+.PHONY : src/tools/Mat_time.s
+
+# target to generate assembly for a file
+src/tools/Mat_time.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/Mat_time.cpp.s
+.PHONY : src/tools/Mat_time.cpp.s
+
 src/tools/predictor.o: src/tools/predictor.cpp.o
 
 .PHONY : src/tools/predictor.o
@@ -336,6 +363,9 @@ help:
 	@echo "... src/thread/my_thread.o"
 	@echo "... src/thread/my_thread.i"
 	@echo "... src/thread/my_thread.s"
+	@echo "... src/tools/Mat_time.o"
+	@echo "... src/tools/Mat_time.i"
+	@echo "... src/tools/Mat_time.s"
 	@echo "... src/tools/predictor.o"
 	@echo "... src/tools/predictor.i"
 	@echo "... src/tools/predictor.s"

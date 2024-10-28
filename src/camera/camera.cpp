@@ -88,9 +88,9 @@ void Camera::PrintDeviceINfo()
     }
     else if (pDeviceInfo.nTLayerType == MV_USB_DEVICE)
     {
-        printf("UserDefinedName: %s\n", pDeviceInfo.SpecialInfo.stUsb3VInfo.chUserDefinedName);
-        printf("Serial Number: %s\n", pDeviceInfo.SpecialInfo.stUsb3VInfo.chSerialNumber);
-        printf("Device Number: %d\n\n", pDeviceInfo.SpecialInfo.stUsb3VInfo.nDeviceNumber);
+        // printf("UserDefinedName: %s\n", pDeviceInfo.SpecialInfo.stUsb3VInfo.chUserDefinedName);
+        // printf("Serial Number: %s\n", pDeviceInfo.SpecialInfo.stUsb3VInfo.chSerialNumber);
+        // printf("Device Number: %d\n\n", pDeviceInfo.SpecialInfo.stUsb3VInfo.nDeviceNumber);
     }
     else
     {
@@ -133,25 +133,28 @@ void Camera::get_pic(cv::Mat *srcimg)
     CvtParam.enDstPixelType = PixelType_Gvsp_BGR8_Packed;         // 目标像素格式
 
     static std::vector<uint8_t> buffer(stOutFrame.stFrameInfo.nWidth * stOutFrame.stFrameInfo.nHeight * 4 + 2048);
-    CvtParam.pDstBuffer = buffer.data();     // 输出数据缓存
-    CvtParam.nDstBufferSize = buffer.size(); // 输出缓冲区大小
-
-    // 转换像素格式
-    ret = MV_CC_ConvertPixelType(handle, &CvtParam);
-    if (ret != MV_OK)
+    if (!buffer.empty())
     {
-        std::cerr << "Failed to convert pixel type, error code: " << ret << std::endl;
-        MV_CC_FreeImageBuffer(handle, &stOutFrame); // 释放图像缓冲区
-        return;
-    }
+        CvtParam.pDstBuffer = buffer.data();     // 输出数据缓存
+        CvtParam.nDstBufferSize = buffer.size(); // 输出缓冲区大小
 
-    // 创建 OpenCV Mat 对象
-    *srcimg = cv::Mat(stOutFrame.stFrameInfo.nHeight, stOutFrame.stFrameInfo.nWidth, CV_8UC3, buffer.data());
+        // 转换像素格式
+        ret = MV_CC_ConvertPixelType(handle, &CvtParam);
+        if (ret != MV_OK)
+        {
+            std::cerr << "Failed to convert pixel type, error code: " << ret << std::endl;
+            MV_CC_FreeImageBuffer(handle, &stOutFrame); // 释放图像缓冲区
+            return;
+        }
 
-    // 释放图像缓冲区
-    if (stOutFrame.pBufAddr != NULL)
-    {
-        MV_CC_FreeImageBuffer(handle, &stOutFrame);
+        // 创建 OpenCV Mat 对象
+        *srcimg = cv::Mat(stOutFrame.stFrameInfo.nHeight, stOutFrame.stFrameInfo.nWidth, CV_8UC3, buffer.data());
+
+        // 释放图像缓冲区
+        if (stOutFrame.pBufAddr != NULL)
+        {
+            MV_CC_FreeImageBuffer(handle, &stOutFrame);
+        }
     }
 }
 

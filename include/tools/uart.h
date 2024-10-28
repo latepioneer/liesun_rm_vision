@@ -12,11 +12,57 @@
 #include <termios.h> /*PPSIX 终端控制定义*/
 #include <errno.h>   /*错误号定义*/
 #include <string>
+#include <chrono>
 // 宏定义
 #define FALSE -1
 #define TRUE 0
 
 void LError(const char *message);
+
+template <typename T>
+unsigned char crc8withTable(T *addr, int len, const unsigned char *crc8table)
+{
+    unsigned char crc = 0x00; // 初始 CRC 值
+    unsigned char data;
+
+    // 将结构体转换为字节指针，逐字节计算
+    unsigned char *bytePtr = (unsigned char *)addr;
+
+    // 逐字节计算 CRC
+    for (int i = 0; i < len; i++)
+    {
+
+        data = bytePtr[i];
+        if (data == 0xA5)
+            continue;
+        crc ^= data;
+        crc = crc8table[crc];
+    }
+    return crc ^ 0x00;
+}
+
+struct ReceivePacket
+{
+    uint8_t header;       // 针头0xA5
+    uint8_t detect_color; // 0: red, 1: blue
+    float initial_speed;  // 弹丸速度
+    float q[4];           // 四元数
+    uint8_t crc = 0;
+    uint8_t tail; // 帧尾
+    bool check();
+} __attribute__((packed));
+
+struct SendPacket
+{
+    uint8_t header = 0xA5;
+    uint8_t tracking; // 是否锁定
+    uint8_t id;       // 锁定的是几号
+    float pitch;
+    float yaw;    // pitch，yaw角度
+    uint8_t crc;  // crc校验
+    uint8_t tail; // 帧尾
+    SendPacket(uint8_t tracking, uint8_t id, float pitch, float yaw);
+} __attribute__((packed));
 
 class comm_service
 {
@@ -41,13 +87,14 @@ public:
 
     /*@brief 接收数据*
     @param rec_buf 接收数据流
-    @param data_len 接收最大长度*/
-    int CommRecv(char *rcv_buf, int data_len);
+    @return -1接受失败
+    */
+    int CommRecv(ReceivePacket &rcv_buf);
 
     /*@brief 发送函数
     @param 串口发送数据
     @param data_len 发送的长度*/
-    int CommSend(char *send_buf, int data_len);
+    int CommSend(const SendPacket *send_data);
 
     /*@brief 获取文件描述*/
     int CommGetFD() const;
@@ -65,7 +112,7 @@ private:
 };
 
 // 查表法实现crc8的校验计算,多项式为0x07
-const unsigned int crc8table[256] = {
+const unsigned char crc8table[256] = {
     0, 7, 14, 9, 28, 27, 18, 21, 56, 63, 54, 49, 36, 35, 42, 45,
     112, 119, 126, 121, 108, 107, 98, 101, 72, 79, 70, 65, 84, 83, 90, 93,
     224, 231, 238, 233, 252, 251, 242, 245, 216, 223, 214, 209, 196, 195, 202, 205,
@@ -82,20 +129,3 @@ const unsigned int crc8table[256] = {
     62, 57, 48, 55, 34, 37, 44, 43, 6, 1, 8, 15, 26, 29, 20, 19,
     174, 169, 160, 167, 178, 181, 188, 187, 150, 145, 152, 159, 138, 141, 132, 131,
     222, 217, 208, 215, 194, 197, 204, 203, 230, 225, 232, 239, 250, 253, 244, 243};
-
-template <typename T>
-unsigned char crc8withTable(T *addr, int len, unsigned char *crc8table)
-{
-    unsigned char data;
-    unsigned char crc = 00;
-    int i;
-    for (; len > 0; len--)
-    {
-        data = *addr++;
-        crc = crc ^ data;
-        crc = crc8table[crc];
-    }
-    crc = crc ^ 0x00;
-    return crc;
-}
-

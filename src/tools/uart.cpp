@@ -5,6 +5,23 @@ void LError(const char *src)
     std::cout << src << std::endl;
 }
 
+bool ReceivePacket::check()
+{
+    // printf("%f    %x   %x\n", this->q[0], crc8withTable(this, sizeof(ReceivePacket) - 2, crc8table), this->crc);
+    if (crc8withTable(this, sizeof(ReceivePacket) - 2, crc8table) != this->crc)
+    {
+        // std::cout << "data error" << std::endl;
+        return false;
+    }
+    // std::cout << "data right" << std::endl;
+    return true;
+}
+
+SendPacket::SendPacket(uint8_t tracking, uint8_t id, float pitch, float yaw) : tracking(tracking), id(id), pitch(pitch), yaw(yaw)
+{
+    this->crc = crc8withTable(this, sizeof(SendPacket) - 2, crc8table);
+}
+
 comm_service::comm_service() : m_fd(-1) {}
 
 comm_service::~comm_service() {}
@@ -192,55 +209,28 @@ int comm_service::CommInit(int speed, int flow_ctrl, int databits, int stopbits,
     return commSet(speed, flow_ctrl, databits, stopbits, parity);
 }
 
-int comm_service::CommRecv(char *rcv_buf, int max_len)
+int comm_service::CommRecv(ReceivePacket &rcv_buf)
 {
     if (!commIsOpen())
         return -1; // 如果串口未打开，则返回-1
-
-    int total_len = 0; // 已接收的数据总长度
-    int len = 0;       // 每次读取的数据长度
-    unsigned char byte;
-
-    while (total_len < max_len)
-    {
-        len = read(m_fd, &byte, 1); // 每次读取1个字节
-        if (len > 0)
-        {
-            rcv_buf[total_len++] = byte; // 将读取的数据存入缓冲区
-            if (byte == 0xCC)
-            {
-                // 如果检测到帧尾，则停止接收
-                break;
-            }
-        }
-        else if (len < 0)
-        {
-            return -1; // 读取错误，返回-1
-        }
-    }
-
-    if (total_len >= max_len)
-    {
-        return -1; // 如果接收数据超出缓冲区大小，返回-1
-    }
-
-    return total_len; // 返回接收到的总字节数
+    int len = 0;   // 每次读取的数据长度
+    len = read(m_fd, &rcv_buf, sizeof(ReceivePacket));
+    return rcv_buf.check();
 }
 
-int comm_service::CommSend(char *send_buf, int data_len)
+int comm_service::CommSend(const SendPacket *send_buf)
 {
     if (!commIsOpen())
         return -1;
 
     CommFlush(TCIFLUSH);
     int len = 0;
-    len = write(m_fd, send_buf, data_len);
-    if (len == data_len)
-        return len;
-    else
+    len = write(m_fd, send_buf, sizeof(SendPacket));
+    std::cout << len << std::endl;
+    if (len == -1)
     {
         tcflush(m_fd, TCOFLUSH);
-        return FALSE;
+        // return FALSE;
     }
 }
 

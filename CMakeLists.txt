@@ -5,6 +5,10 @@ project(test_opencv)
 # 查找 OpenCV 库
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
+#查找 Egien3库
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+
 
 # 包含头文件目录
 include_directories(./include/camera)

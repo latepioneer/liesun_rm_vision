@@ -69,6 +69,7 @@ ArmorBox::ArmorBox(LightBlob left, LightBlob right)
         type = BIG_ARMOR;
     else
         type = SMALL_ARMOR;
+    std::cout << type << std::endl;
 }
 
 bool ArmorBox::operator>(const ArmorBox &armor_2) const

@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/test.dir/src/camera/camera.cpp.o"
   "CMakeFiles/test.dir/src/main.cpp.o"
   "CMakeFiles/test.dir/src/thread/my_thread.cpp.o"
+  "CMakeFiles/test.dir/src/tools/Mat_time.cpp.o"
   "CMakeFiles/test.dir/src/tools/predictor.cpp.o"
   "CMakeFiles/test.dir/src/tools/uart.cpp.o"
   "test"
