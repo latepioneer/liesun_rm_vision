@@ -13,6 +13,7 @@
 #include "predictor.h"
 #include "uart.h"
 #include "Mat_time.h"
+#include "classify.h"
 
 #define enemy_color RED // 蓝0红2
 #define GYRO_BUFFER_NUM 15
@@ -43,9 +44,11 @@ private:
     std::vector<Gyropose> get_data_buffer;
     std::queue<SendPacket> send_data_buffer;
 
-    Camera cam;
-    ArmorDetector armordetector;
+    Camera cam;                  // 摄像头
+    ArmorDetector armordetector; // 装甲板探测
     CoordPredictor coorpredictor;
 
     comm_service uart;
+
+    DataSet dataset;
 };

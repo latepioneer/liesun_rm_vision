@@ -30,23 +30,25 @@ LightBlob::LightBlob(cv::RotatedRect rrect, double width, double height)
     }
 }
 
-std::vector<cv::Point2f> sortRotatedRectPoints(std::vector<cv::Point2f> points, double angle)
+std::vector<cv::Point2f> sortRotatedRectPoints(std::vector<cv::Point2f> points)
 {
-    for (int i = 0; i < 4; i++)
-        for (int k = i + 1; k < 4; ++k)
-            if (points[i].x > points[k].x)
-                swap(points[i], points[k]);
+    // 1. 根据 x 坐标排序，确保左边的两个点在前
+    std::sort(points.begin(), points.end(), [](const cv::Point2f &a, const cv::Point2f &b)
+              { return a.x < b.x; });
+
+    // 2. 前两个点是最左边的点，根据 y 坐标排序，将上面的点放在 points[0]
     if (points[0].y > points[1].y)
     {
-        cv::Point2f t = points[0];
-        points[0] = points[1];
-        points[1] = points[3];
-        points[3] = t;
+        std::swap(points[0], points[1]);
     }
-    else
-        swap(points[1], points[3]);
-    if (points[1].y > points[2].y)
-        swap(points[1], points[2]);
+
+    // 3. 后两个点是最右边的点，根据 y 坐标排序，将上面的点放在 points[2]
+    if (points[2].y > points[3].y)
+    {
+        std::swap(points[2], points[3]);
+    }
+
+    // 返回按顺序排列的点：左上、左下、右上、右下
     return points;
 }
 
@@ -54,22 +56,22 @@ ArmorBox::ArmorBox(LightBlob left, LightBlob right)
 {
     this->light_Blobs->push_back(left);
     this->light_Blobs->push_back(right);
-    cv::Point center = (left.rrect.center + right.rrect.center) / 2.0;
+    center = (left.rrect.center + right.rrect.center) / 2.0;
     double length, width, angle;
     width = sqrt(pow(right.rrect.center.x - left.rrect.center.x, 2) + pow(right.rrect.center.y - left.rrect.center.y, 2));
     length = std::max(left.height, right.height); // 灯条长度
     angle = atan2(right.rrect.center.y - left.rrect.center.y, right.rrect.center.x - left.rrect.center.x) * 180 / CV_PI;
     double height = 2 * length; // 装甲板宽度
-    rect = cv::RotatedRect(center, cv::Size(width, height), angle);
+    rect = cv::RotatedRect(center, cv::Size(width - left.width / 2 - right.width / 2, height), angle);
     std::vector<cv::Point2f> points(4);
     rect.points(points.data());
-    this->points = sortRotatedRectPoints(points, angle);
+    this->points = sortRotatedRectPoints(points);
     // 初步判断装甲板大小
     if (width / height > 2.5)
         type = BIG_ARMOR;
     else
         type = SMALL_ARMOR;
-    std::cout << type << std::endl;
+    box = cv::Rect(center - cv::Point(width / 2.0, height / 2.0), cv::Size(width, height));
 }
 
 bool ArmorBox::operator>(const ArmorBox &armor_2) const

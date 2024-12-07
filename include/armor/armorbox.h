@@ -46,7 +46,8 @@ class ArmorBox
 {
 public:
     cv::RotatedRect rect; // 装甲板旋转矩形
-    cv::Rect box;
+    cv::Point center;
+    cv::Rect box;              // 装甲板框选
     LightBlobs light_Blobs[2]; // 装甲板的左右灯条 [0]左 [1]右
     std::vector<cv::Point2f> points;
     int id;   // 装甲板id

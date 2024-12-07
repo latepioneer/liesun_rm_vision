@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/wtl/codefield/opencv_test/src/main.cpp" "/home/wtl/codefield/opencv_test/build/CMakeFiles/test.dir/src/main.cpp.o"
   "/home/wtl/codefield/opencv_test/src/thread/my_thread.cpp" "/home/wtl/codefield/opencv_test/build/CMakeFiles/test.dir/src/thread/my_thread.cpp.o"
   "/home/wtl/codefield/opencv_test/src/tools/Mat_time.cpp" "/home/wtl/codefield/opencv_test/build/CMakeFiles/test.dir/src/tools/Mat_time.cpp.o"
+  "/home/wtl/codefield/opencv_test/src/tools/classify.cpp" "/home/wtl/codefield/opencv_test/build/CMakeFiles/test.dir/src/tools/classify.cpp.o"
   "/home/wtl/codefield/opencv_test/src/tools/predictor.cpp" "/home/wtl/codefield/opencv_test/build/CMakeFiles/test.dir/src/tools/predictor.cpp.o"
   "/home/wtl/codefield/opencv_test/src/tools/uart.cpp" "/home/wtl/codefield/opencv_test/build/CMakeFiles/test.dir/src/tools/uart.cpp.o"
   )
@@ -23,6 +24,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   ".././include/thread"
   ".././include/tools"
   "/opt/MVS/include"
+  "/home/wtl/onnxruntime-linux-x64-1.20.0/include"
   "/usr/local/include/opencv4"
   )
 

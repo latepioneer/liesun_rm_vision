@@ -122,9 +122,22 @@ CMakeFiles/test.dir/src/tools/Mat_time.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/tools/Mat_time.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/tools/Mat_time.cpp -o CMakeFiles/test.dir/src/tools/Mat_time.cpp.s
 
+CMakeFiles/test.dir/src/tools/classify.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/tools/classify.cpp.o: ../src/tools/classify.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/src/tools/classify.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/tools/classify.cpp.o -c /home/wtl/codefield/opencv_test/src/tools/classify.cpp
+
+CMakeFiles/test.dir/src/tools/classify.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test.dir/src/tools/classify.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wtl/codefield/opencv_test/src/tools/classify.cpp > CMakeFiles/test.dir/src/tools/classify.cpp.i
+
+CMakeFiles/test.dir/src/tools/classify.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/tools/classify.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wtl/codefield/opencv_test/src/tools/classify.cpp -o CMakeFiles/test.dir/src/tools/classify.cpp.s
+
 CMakeFiles/test.dir/src/tools/predictor.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/tools/predictor.cpp.o: ../src/tools/predictor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/src/tools/predictor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/src/tools/predictor.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/tools/predictor.cpp.o -c /home/wtl/codefield/opencv_test/src/tools/predictor.cpp
 
 CMakeFiles/test.dir/src/tools/predictor.cpp.i: cmake_force
@@ -137,7 +150,7 @@ CMakeFiles/test.dir/src/tools/predictor.cpp.s: cmake_force
 
 CMakeFiles/test.dir/src/tools/uart.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/tools/uart.cpp.o: ../src/tools/uart.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/src/tools/uart.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test.dir/src/tools/uart.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/tools/uart.cpp.o -c /home/wtl/codefield/opencv_test/src/tools/uart.cpp
 
 CMakeFiles/test.dir/src/tools/uart.cpp.i: cmake_force
@@ -150,7 +163,7 @@ CMakeFiles/test.dir/src/tools/uart.cpp.s: cmake_force
 
 CMakeFiles/test.dir/src/main.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test.dir/src/main.cpp.o -c /home/wtl/codefield/opencv_test/src/main.cpp
 
 CMakeFiles/test.dir/src/main.cpp.i: cmake_force
@@ -168,6 +181,7 @@ test_OBJECTS = \
 "CMakeFiles/test.dir/src/armor/armordetector.cpp.o" \
 "CMakeFiles/test.dir/src/thread/my_thread.cpp.o" \
 "CMakeFiles/test.dir/src/tools/Mat_time.cpp.o" \
+"CMakeFiles/test.dir/src/tools/classify.cpp.o" \
 "CMakeFiles/test.dir/src/tools/predictor.cpp.o" \
 "CMakeFiles/test.dir/src/tools/uart.cpp.o" \
 "CMakeFiles/test.dir/src/main.cpp.o"
@@ -180,6 +194,7 @@ test: CMakeFiles/test.dir/src/armor/armorbox.cpp.o
 test: CMakeFiles/test.dir/src/armor/armordetector.cpp.o
 test: CMakeFiles/test.dir/src/thread/my_thread.cpp.o
 test: CMakeFiles/test.dir/src/tools/Mat_time.cpp.o
+test: CMakeFiles/test.dir/src/tools/classify.cpp.o
 test: CMakeFiles/test.dir/src/tools/predictor.cpp.o
 test: CMakeFiles/test.dir/src/tools/uart.cpp.o
 test: CMakeFiles/test.dir/src/main.cpp.o
@@ -218,6 +233,7 @@ test: /usr/local/lib/libopencv_xfeatures2d.so.4.10.0
 test: /usr/local/lib/libopencv_xobjdetect.so.4.10.0
 test: /usr/local/lib/libopencv_xphoto.so.4.10.0
 test: /opt/MVS/lib/64/libMvCameraControl.so
+test: /home/wtl/onnxruntime-linux-x64-1.20.0/lib/libonnxruntime.so
 test: /usr/local/lib/libopencv_shape.so.4.10.0
 test: /usr/local/lib/libopencv_highgui.so.4.10.0
 test: /usr/local/lib/libopencv_datasets.so.4.10.0
@@ -239,7 +255,7 @@ test: /usr/local/lib/libopencv_photo.so.4.10.0
 test: /usr/local/lib/libopencv_imgproc.so.4.10.0
 test: /usr/local/lib/libopencv_core.so.4.10.0
 test: CMakeFiles/test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/wtl/codefield/opencv_test/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

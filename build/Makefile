@@ -285,6 +285,33 @@ src/tools/Mat_time.cpp.s:
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/Mat_time.cpp.s
 .PHONY : src/tools/Mat_time.cpp.s
 
+src/tools/classify.o: src/tools/classify.cpp.o
+
+.PHONY : src/tools/classify.o
+
+# target to build an object file
+src/tools/classify.cpp.o:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/classify.cpp.o
+.PHONY : src/tools/classify.cpp.o
+
+src/tools/classify.i: src/tools/classify.cpp.i
+
+.PHONY : src/tools/classify.i
+
+# target to preprocess a source file
+src/tools/classify.cpp.i:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/classify.cpp.i
+.PHONY : src/tools/classify.cpp.i
+
+src/tools/classify.s: src/tools/classify.cpp.s
+
+.PHONY : src/tools/classify.s
+
+# target to generate assembly for a file
+src/tools/classify.cpp.s:
+	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/tools/classify.cpp.s
+.PHONY : src/tools/classify.cpp.s
+
 src/tools/predictor.o: src/tools/predictor.cpp.o
 
 .PHONY : src/tools/predictor.o
@@ -366,6 +393,9 @@ help:
 	@echo "... src/tools/Mat_time.o"
 	@echo "... src/tools/Mat_time.i"
 	@echo "... src/tools/Mat_time.s"
+	@echo "... src/tools/classify.o"
+	@echo "... src/tools/classify.i"
+	@echo "... src/tools/classify.s"
 	@echo "... src/tools/predictor.o"
 	@echo "... src/tools/predictor.i"
 	@echo "... src/tools/predictor.s"

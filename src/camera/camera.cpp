@@ -132,7 +132,7 @@ void Camera::get_pic(cv::Mat *srcimg)
     CvtParam.nSrcDataLen = stOutFrame.stFrameInfo.nFrameLen;      // 输入数据长度
     CvtParam.enDstPixelType = PixelType_Gvsp_BGR8_Packed;         // 目标像素格式
 
-    static std::vector<uint8_t> buffer(stOutFrame.stFrameInfo.nWidth * stOutFrame.stFrameInfo.nHeight * 4 + 2048);
+    static std::vector<uint8_t> buffer(stOutFrame.stFrameInfo.nWidth * stOutFrame.stFrameInfo.nHeight * 3);
     if (!buffer.empty())
     {
         CvtParam.pDstBuffer = buffer.data();     // 输出数据缓存

@@ -5,12 +5,6 @@ double ArmorDetector::distance(cv::Point2f first, cv::Point2f second)
     return sqrt(pow(first.x - second.x, 2) + pow(first.y - second.y, 2));
 }
 
-/*
-    @brief 图像预处理
-    @param img 需要处理的图像
-    @param color 识别颜色
-    @return 筛选后的二值图片
-*/
 cv::Mat ArmorDetector::img_preprocess(cv::Mat *img, int color)
 {
     vector<cv::Mat> channels;
@@ -51,10 +45,6 @@ cv::Mat ArmorDetector::img_preprocess(cv::Mat *img, int color)
     return color_binary;
 }
 
-/*
-    @brief 寻找合适的灯条
-    @param binary 经过预处理的图片
-*/
 void ArmorDetector::find_light(cv::Mat binary)
 {
     vector<vector<cv::Point>> contours;
@@ -113,7 +103,7 @@ bool ArmorDetector::isCoupleLight(const LightBlob &light_blob_i, const LightBlob
     return true;
 }
 
-bool ArmorDetector::matchArmorBoxes(LightBlobs &light_blobs, ArmorBoxes &armor_boxes)
+bool ArmorDetector::matchArmorBoxes(LightBlobs &light_blobs, ArmorBoxes &armor_boxes, cv::Mat *img)
 {
     // armor_boxes.clear();
     if (lightblobs.size() < 2)
@@ -142,7 +132,15 @@ bool ArmorDetector::matchArmorBoxes(LightBlobs &light_blobs, ArmorBoxes &armor_b
         return false;
     }
 
-    // return getArmorNum(armor_boxes);
+    getArmorNum(armor_boxes, img);
+}
+
+void ArmorDetector::getArmorNum(ArmorBoxes &armor_boxes, cv::Mat *img)
+{
+    for (auto armor : armorboxes)
+    {
+        armor.id = classify.predit(armor.points, img);
+    }
 }
 
 void ArmorDetector::getBestArmor(ArmorBoxes &boxes)
@@ -157,12 +155,13 @@ void ArmorDetector::getBestArmor(ArmorBoxes &boxes)
 
 bool ArmorDetector::ifOldArmor()
 {
-    // if (last_target.box.empty() || ArmorState::LOST)
-    // return false;
-    // if (lost_count)
+    if (last_target.box.empty() || ArmorState::LOST)
+        return false;
+    if (lost_count)
+        ;
 }
 
-void ArmorDetector::find_armor()
+void ArmorDetector::find_armor(cv::Mat *img)
 {
     // if (lightblobs.size() < 2)
     //     return;
@@ -184,13 +183,14 @@ void ArmorDetector::find_armor()
     //         armorboxes.push_back(rect_armor);
     //     }
     // lightblobs.clear();
-    matchArmorBoxes(lightblobs, armorboxes);
+    if (!matchArmorBoxes(lightblobs, armorboxes, img))
+        return;
     getBestArmor(armorboxes);
-    // if (ifOldArmor())
-    //     state = ArmorState::SHOOT;
-    // else
-    //     state = ArmorState::FIRST;
-    // last_target = armorboxes[0];
+    if (ifOldArmor())
+        state = ArmorState::SHOOT;
+    else
+        state = ArmorState::FIRST;
+    last_target = armorboxes[0];
 }
 
 cv::Point3f ArmorDetector::pnp(ArmorBox armor)
@@ -217,56 +217,11 @@ cv::Point3f ArmorDetector::pnp(ArmorBox armor)
     cv::Mat rvec = cv::Mat::zeros(3, 1, CV_64FC1);
     cv::Mat tvec = cv::Mat::zeros(3, 1, CV_64FC1);
     solvePnP(Points3D, armor.points, Camera().cameraMatrix, Camera().distCoeffs, rvec, tvec, false, cv::SOLVEPNP_AP3P);
-    // myData<float> data((float)tvec.ptr<double>(0)[0], (float)tvec.ptr<double>(0)[1], (float)tvec.ptr<double>(0)[2]);
     cv::Point3f points((float)tvec.ptr<double>(0)[0], (float)tvec.ptr<double>(0)[1], (float)tvec.ptr<double>(0)[2]);
-    //cout << "x:" << points.x << "     y:" << points.y << "      z:" << points.z << endl;
+    // cout << "x:" << points.x << "     y:" << points.y << "      z:" << points.z << endl;
     return points;
 }
 
-// void ArmorDetector::getArmorNum(ArmorBoxes& armor_boxes)
-//{
-//	Mat temp;
-//	bool all_wrong_flag = true; // 是否全为WRONG装甲板
-//	for (auto& armor : armor_boxes)
-//	{
-//		adjustBox(armor.box);
-//		temp = src(Rect2d(armor.box));
-//		resize(temp, temp, Size(28, 28), cv::INTER_LINEAR);
-//		Gamma(temp, temp, 0.6);
-//		cvtColor(temp, temp, COLOR_BGR2GRAY);
-//		armor.id = classifier(temp);
-//		armor.confidence = 1.0;
-//
-//		if (debug_param.debug_classifier)
-//			imshow("ID", temp);
-//
-//		switch (armor.id)
-//		{
-//		case 0:
-//		case 1:
-//		case 6:
-//		case 7:
-//			all_wrong_flag = false;
-//			armor.type = ArmorType::BIG;
-//			break;
-//
-//		case 2:
-//		case 3:
-//		case 4:
-//		case 5:
-//			all_wrong_flag = false;
-//			armor.type = ArmorType::SMALL;
-//			break;
-//
-//			// case 3:
-//			// case 4:
-//			// case 5:
-//			//     all_wrong_flag = false;
-//
-//		default:
-//			break;
-//		}
-//	}
 cv::Point3f camera_to_world(Eigen::Quaternionf q1, cv::Point3f point, cv::Point3f trans_offset = cv::Point3f(-0.3, 9, 27.9))
 {
     // point += trans_offset;

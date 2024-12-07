@@ -1146,6 +1146,18 @@
 			"value" : "[/usr/local][v4.10.0()]"
 		},
 		{
+			"name" : "ONNXRUNTIME_LIB",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/home/wtl/onnxruntime-linux-x64-1.20.0/lib/libonnxruntime.so"
+		},
+		{
 			"name" : "OpenCV_DIR",
 			"properties" : 
 			[

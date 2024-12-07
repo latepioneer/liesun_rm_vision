@@ -1,6 +1,7 @@
 #pragma once
 #include <opencv2/opencv.hpp>
 
+/*@brief 装甲板中心位置预测*/
 class CoordPredictor
 {
 private:

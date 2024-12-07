@@ -5,10 +5,10 @@ bool Task::init()
 {
     if (!cam.start_cam())
         return 0;
-    if (!uart.CommOpen("/dev/ttyACM0"))
-        return 0;
-    if (uart.CommInit(115200, 0, 8, 1, 'N') == -1)
-        return 0;
+    // if (!uart.CommOpen("/dev/ttyACM0"))
+    //     return 0;
+    // if (uart.CommInit(115200, 0, 8, 1, 'N') == -1)
+    //     return 0;
     return 1;
 }
 
@@ -16,17 +16,16 @@ void Task::camera_task()
 {
     while (1)
     {
-        /// cout << "camera_task" << endl;
         if (cv::waitKey(1) == 27)
         {
             cam.close_cam();
         }
         cv::Mat img;
         cam.get_pic(&img);
+        cv::Mat rimg;
         if (!img.empty())
-            resize(img, img, cv::Size(), 0.5, 0.5, cv::INTER_AREA);
-        // cv::imshow("2", img);
-        Mat_time timg(&img);
+            resize(img, rimg, cv::Size(), 0.5, 0.5, cv::INTER_AREA);
+        Mat_time timg(&rimg);
         pic_mtx.lock();
         pic_buffer.push(timg);
         if (pic_buffer.size() >= 6)
@@ -51,39 +50,50 @@ void Task::get_armor_task()
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
         pic_mtx.lock();
-        Mat_time img = pic_buffer.front();
+        Mat_time img_t = pic_buffer.front();
         pic_buffer.pop();
-        pic_mtx.unlock();
-        /// cout << "get_armor_task: Processing image..." << endl;
-        while (!InterGyroPose(img))
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-        cv::Point3f point = get_armor_xyz(&img.img);
+        cv::Mat binary = armordetector.img_preprocess(&img_t.img, enemy_color);
+        armordetector.find_light(binary);
+        armordetector.find_armor(&img_t.img);
+        
+        
         if (!armordetector.armorboxes.empty())
         {
-            armordetector.lose_count = 0;
-            armordetector.state = ArmorState::SHOOT;
-            Point_time tpoint(point);
-            armordetector.getPitchYaw(tpoint.world_point, img.gyro_pose);
-            send_data_mtx.lock();
-            SendPacket sdata( ArmorState::SHOOT, 1,armordetector.pitch, armordetector.yaw);
-            cout << "try" << endl;
-            send_data_buffer.push(sdata);
-            send_data_mtx.unlock();
+            cv::putText(img_t.img, to_string(armordetector.armorboxes[0].id), armordetector.armorboxes[0].center, cv::FONT_HERSHEY_SIMPLEX, 2, cv::Scalar(255, 255, 255), 3);
+            //dataset.imagesSave(armordetector.armorboxes.front().points, &img_t.img, "3");
         }
-        else if (armordetector.state != ArmorState::LOST)
-        {
-            armordetector.lose_count++;
-            if(armordetector.lose_count == 70)
-            {
-                armordetector.state = ArmorState::LOST;
-                send_data_mtx.lock();
-                SendPacket sdata( armordetector.state, 1,armordetector.pitch, armordetector.yaw);
-                cout << "try" << endl;
-                send_data_buffer.push(sdata);
-                send_data_mtx.unlock();
-            }
-        }
+        cv::imshow("1", img_t.img);
+        pic_mtx.unlock();
+        /// cout << "get_armor_task: Processing image..." << endl;
+        // while (!InterGyroPose(img))
+        //     std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+        // cv::Point3f point = get_armor_xyz(&img.img);
+        // if (!armordetector.armorboxes.empty())
+        // {
+        //     armordetector.lost_count = 0;
+        //     armordetector.state = ArmorState::SHOOT;
+        //     Point_time tpoint(point);
+        //     armordetector.getPitchYaw(tpoint.world_point, img.gyro_pose);
+        //     send_data_mtx.lock();
+        //     SendPacket sdata(ArmorState::SHOOT, 1, armordetector.pitch, armordetector.yaw);
+        //     cout << "try" << endl;
+        //     send_data_buffer.push(sdata);
+        //     send_data_mtx.unlock();
+        // }
+        // else if (armordetector.state != ArmorState::LOST)
+        // {
+        //     armordetector.lost_count++;
+        //     if (armordetector.lost_count == 70)
+        //     {
+        //         armordetector.state = ArmorState::LOST;
+        //         send_data_mtx.lock();
+        //         SendPacket sdata(armordetector.state, 1, armordetector.pitch, armordetector.yaw);
+        //         cout << "try" << endl;
+        //         send_data_buffer.push(sdata);
+        //         send_data_mtx.unlock();
+        //     }
+        // }
         armordetector.armorboxes.clear();
         armordetector.lightblobs.clear();
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
@@ -92,10 +102,20 @@ void Task::get_armor_task()
 
 cv::Point3f Task::get_armor_xyz(cv::Mat *img)
 {
-    cv::Mat binary = armordetector.img_preprocess(img, enemy_color);
+    cv::Mat binary;
+    if (armordetector.state == ArmorState::SHOOT)
+    {
+        armordetector.ROI = (*img)(armordetector.last_target.box);
+        binary = armordetector.img_preprocess(&armordetector.ROI, enemy_color);
+    }
+    else if (armordetector.state == ArmorState::LOST)
+    {
+        binary = armordetector.img_preprocess(img, enemy_color);
+    }
+
     armordetector.find_light(binary);
     // cout << armordetector.lightblobs.size() << endl;
-    armordetector.find_armor();
+    armordetector.find_armor(img);
 
     if (!armordetector.armorboxes.empty())
     {
@@ -185,7 +205,7 @@ void Task::get_uart_task()
 
             get_data_mtx.lock();
             Gyropose new_post(rdata.q);
-            //cout << rdata.q[0] << endl;
+            // cout << rdata.q[0] << endl;
             get_data_buffer.push_back(new_post);
             if (get_data_buffer.size() > GYRO_BUFFER_NUM)
                 get_data_buffer.erase(get_data_buffer.begin());
