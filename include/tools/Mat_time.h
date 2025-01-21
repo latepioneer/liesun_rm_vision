@@ -15,7 +15,7 @@ public:
     Gyropose();
 };
 
-class Mat_time : public cv::Mat
+class Mat_time
 {
 private:
 public:
@@ -24,21 +24,5 @@ public:
     std::chrono::steady_clock::time_point start_time;
     Mat_time() {};
     Mat_time(cv::Mat *img);
-    /*@param 获得该图像的处理时间*/
-    void get_process_time();
-    void get_img();
+    void copyTo(Mat_time &frame);
 };
-
-class Point_time : public cv::Point3f
-{
-private:
-    std::chrono::steady_clock::time_point local_time;
-
-public:
-    cv::Point3f world_point;
-
-public:
-    Point_time(cv::Point3f world_point):world_point(world_point){}
-};
-
-cv::Point3f cameratowoprld(Eigen::Quaternionf q, cv::Point3f, cv::Point3f trans_offset);

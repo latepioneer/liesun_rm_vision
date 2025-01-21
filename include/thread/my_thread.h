@@ -29,10 +29,8 @@ public:
     void send_uart_task();
     void get_uart_task();
     bool InterGyroPose(Mat_time &frame);
-
+    void ArmorConsumer(ArmorDetector &detector,Mat_time frame);
     bool init();
-
-    cv::Point3f get_armor_xyz(cv::Mat *img);
 
 private:
     /* 线程锁 */
@@ -45,10 +43,9 @@ private:
     std::queue<SendPacket> send_data_buffer;
 
     Camera cam;                  // 摄像头
-    ArmorDetector armordetector; // 装甲板探测
-    CoordPredictor coorpredictor;
 
-    comm_service uart;
+    comm_service uartr;
+    comm_service uarts;
 
     DataSet dataset;
 };

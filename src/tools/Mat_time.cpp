@@ -23,11 +23,8 @@ Mat_time::Mat_time(cv::Mat *img)
     this->start_time = std::chrono::steady_clock::now();
 }
 
-cv::Point3f cameratowoprld(Eigen::Quaternionf q, cv::Point3f point, cv::Point3f trans_offset)
+void Mat_time::copyTo(Mat_time &frame)
 {
-    point += trans_offset;
-    Eigen::Quaternionf p(0, point.z, -point.x, -point.y);
-
-    Eigen::Quaternionf result = q * p * q.inverse();
-    return cv::Point3f(result.x(), result.y(), result.z());
+    img.copyTo(frame.img);
+    frame.gyro_pose = gyro_pose;
 }

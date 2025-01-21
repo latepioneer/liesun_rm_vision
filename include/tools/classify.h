@@ -42,7 +42,7 @@ class Classify : public DataSet
 {
 private:
     Ort::Env env;                                                              // ONNX Runtime 环境
-    std::string model_path = "../../armor_classify/saved_model/my_model.onnx"; // 模型路径
+    std::string model_path = "../saved_model/my_model.onnx"; // 模型路径
     Ort::Session session;                                                      // 会话对象
     Ort::AllocatorWithDefaultOptions allocator;
     std::string input_name_str, output_name_str;

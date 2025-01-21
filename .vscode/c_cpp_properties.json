@@ -8,7 +8,7 @@
                 "/usr/include/opencv4",
                 "/usr/include/eigen3",
                 "${workspaceFolder}/include/**",
-                "/home/wtl/onnxruntime-linux-x64-1.20.0/include"
+                "/home/liesun/onnxruntime-linux-x64-1.20.1/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

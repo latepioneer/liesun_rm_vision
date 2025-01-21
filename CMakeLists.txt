@@ -15,7 +15,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-find_library(ONNXRUNTIME_LIB onnxruntime PATHS /home/wtl/onnxruntime-linux-x64-1.20.0/lib)
+find_library(ONNXRUNTIME_LIB onnxruntime PATHS /home/liesun/onnxruntime-linux-x64-1.20.1/lib)
 
 
 # 包含头文件目录
@@ -24,7 +24,7 @@ include_directories(./include/armor)
 include_directories(./include/thread)
 include_directories(./include/tools)
 include_directories(/opt/MVS/include)
-include_directories(/home/wtl/onnxruntime-linux-x64-1.20.0/include)
+include_directories(/home/liesun/onnxruntime-linux-x64-1.20.1/include)
 
 # 设置源文件目录
 aux_source_directory(src/camera SRC_LIST)

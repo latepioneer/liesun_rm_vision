@@ -66,16 +66,20 @@ int main()
 
     Task task;
     if (!task.init())
+    {
         cout << "connect error" << endl;
+        return 0;
+    }
+        
     thread t1(&Task::camera_task, &task);
     thread t2(&Task::get_armor_task, &task);
-    // thread t3(&Task::get_uart_task, &task);
-    // thread t4(&Task::send_uart_task, &task);
+    thread t3(&Task::get_uart_task, &task);
+    thread t4(&Task::send_uart_task, &task);
     //  thread t5(&Task::InterGyroPose, &task);
     t1.join();
     t2.join();
-    // t3.join();
-    // t4.join();
+    t3.join();
+    t4.join();
     //  t5.join();
     //   Task task(2);
     //   task.camera_task();

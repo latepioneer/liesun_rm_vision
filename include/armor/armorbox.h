@@ -8,7 +8,7 @@
 #define light_min_wh_ratio 0.1  // 灯条最小宽高比
 #define light_max_wh_ratio 0.25 // 灯条最大宽高比
 #define light_min_ch_ratio 1    // 灯条中心距离与高度之比最小值
-#define light_max_ch_ratio 4.2  // 灯条中心距离与高度之比最大值
+#define light_max_ch_ratio 5  // 灯条中心距离与高度之比最大值
 #define light_max_cdif_ratio 1  // 中心距离之差和高度之比
 #define light_angle_dif 20      // 两灯之间的夹角
 
@@ -30,14 +30,16 @@ class LightBlob
 {
 private:
     cv::RotatedRect rrect;           // 灯条的旋转矩阵
-    std::vector<cv::Point2f> points; // 点位顺序
-    double width, height;
+    
 
     friend class ArmorDetector;
     friend class ArmorBox;
 
 public:
-    LightBlob(cv::RotatedRect rrect, double width, double height);
+    cv::Point up;
+    cv::Point down;
+    LightBlob(cv::RotatedRect rrect);
+    void regularRotated(cv::RotatedRect &rect);
     // LightBlob& operator=(const LightBlob& other);
 };
 typedef std::vector<LightBlob> LightBlobs;
@@ -45,10 +47,11 @@ typedef std::vector<LightBlob> LightBlobs;
 class ArmorBox
 {
 public:
-    cv::RotatedRect rect; // 装甲板旋转矩形
+    cv::RotatedRect light_rect; // 装甲板旋转矩形
+    cv::RotatedRect armor_rect;
     cv::Point center;
     cv::Rect box;              // 装甲板框选
-    LightBlobs light_Blobs[2]; // 装甲板的左右灯条 [0]左 [1]右
+    LightBlobs light_Blobs; // 装甲板的左右灯条 [0]左 [1]右
     std::vector<cv::Point2f> points;
     int id;   // 装甲板id
     int type; // 装加板大小
@@ -57,5 +60,6 @@ public:
     ArmorBox() {};
     ArmorBox(LightBlob left, LightBlob right);
     bool operator>(const ArmorBox &box) const;
+    std::vector<cv::Point2f> get_lightpoints();
 };
 typedef std::vector<ArmorBox> ArmorBoxes;

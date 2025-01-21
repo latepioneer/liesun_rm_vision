@@ -26,10 +26,10 @@ private:
     int num = 0;
 
 public:
-    cv::Mat cameraMatrix = (cv::Mat_<double>(3, 3) << 1148.94897, 0, 326.97111,
-                            0, 1136.90969, 276.29967,
+    cv::Mat cameraMatrix = (cv::Mat_<double>(3, 3) << 1187.11280, 0, 373.96157,
+                            0, 1187.32272, 280.15269,
                             0, 0, 1); // 相机内参矩阵
-    cv::Mat distCoeffs = (cv::Mat_<double>(1, 5) << -0.02406, -0.44315, -0.00163, -0.00534, 1.56468);
+    cv::Mat distCoeffs = (cv::Mat_<double>(1, 5) << -0.08197, 0.62288, -0.00087, 0.00131, -3.26992);
 
     Camera();
     void PrintDeviceINfo();
@@ -45,7 +45,7 @@ public:
         @brief 获取一帧图像
         @param Mat* 图像的存放地址
     */
-    void get_pic(cv::Mat *srcimg);
+    bool get_pic(cv::Mat *srcimg);
     // void myCalibrateCamera();//求相机的内参矩阵以及畸变系数
     // void take_img(Mat* img);
     ~Camera();

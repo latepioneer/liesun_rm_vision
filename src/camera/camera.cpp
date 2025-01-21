@@ -114,14 +114,14 @@ void Camera::close_cam()
     @brief 获取一帧图像
     @param Mat* 图像的存放地址
  */
-void Camera::get_pic(cv::Mat *srcimg)
+bool Camera::get_pic(cv::Mat *srcimg)
 {
     // 获取图像缓冲区
     int ret = MV_CC_GetImageBuffer(handle, &stOutFrame, 10);
     if (ret != MV_OK)
     {
         std::cerr << "Failed to get image buffer, error code: " << std::hex << ret << std::endl;
-        return;
+        return false;
     }
 
     // 设置转换参数
@@ -144,7 +144,7 @@ void Camera::get_pic(cv::Mat *srcimg)
         {
             std::cerr << "Failed to convert pixel type, error code: " << ret << std::endl;
             MV_CC_FreeImageBuffer(handle, &stOutFrame); // 释放图像缓冲区
-            return;
+            return false;
         }
 
         // 创建 OpenCV Mat 对象
@@ -156,6 +156,7 @@ void Camera::get_pic(cv::Mat *srcimg)
             MV_CC_FreeImageBuffer(handle, &stOutFrame);
         }
     }
+    return true;
 }
 
 //

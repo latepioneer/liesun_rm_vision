@@ -48,7 +48,7 @@ struct ReceivePacket
     float initial_speed;  // 弹丸速度
     float q[4];           // 四元数
     uint8_t crc = 0;
-    uint8_t tail; // 帧尾
+    uint8_t tail=0xCC; // 帧尾
     bool check();
 } __attribute__((packed));
 
@@ -62,6 +62,7 @@ struct SendPacket
     uint8_t crc;  // crc校验
     uint8_t tail; // 帧尾
     SendPacket(uint8_t tracking, uint8_t id, float pitch, float yaw);
+    SendPacket(){};
 } __attribute__((packed));
 
 class comm_service
@@ -90,6 +91,8 @@ public:
     @return -1接受失败
     */
     int CommRecv(ReceivePacket &rcv_buf);
+
+    int CommRecv(uint8_t *rcv_buf,float *q);
 
     /*@brief 发送函数
     @param 串口发送数据

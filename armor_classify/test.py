@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 import tf2onnx
 
 # 数据集路径
-dataset_path = '../opencv_test/imgs'
+dataset_path = os.path.join(os.path.dirname(__file__), '..', 'imgs')
 
 # 加载图片和标签
 def load_images_from_folder(folder_path):

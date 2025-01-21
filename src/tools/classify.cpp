@@ -12,13 +12,13 @@ void DataSet::numPreprocessing(std::vector<cv::Point2f> points, const cv::Mat *i
     cv::Mat roi_imgarmor = imgarmor(roi);
     cv::Mat gray_img;
     cv::cvtColor(roi_imgarmor, gray_img, cv::COLOR_BGR2GRAY);
-    cv::threshold(gray_img, armor_num_img, 10, 255, cv::THRESH_BINARY);
+    cv::threshold(gray_img, armor_num_img, 20, 255, cv::THRESH_BINARY);
 }
 
 bool DataSet::imagesSave(std::vector<cv::Point2f> points, const cv::Mat *img, std::string num_kind, std::string address)
 {
     numPreprocessing(points, img);
-
+    imshow("1",armor_num_img);
     // 检查路径并创建文件夹
     if (num_kind == "null")
         return false;
@@ -35,7 +35,7 @@ bool DataSet::imagesSave(std::vector<cv::Point2f> points, const cv::Mat *img, st
     std::string imgname = full_address + "/" + std::to_string(num++) + ".jpg";
 
     // 达到保存次数上限时返回 false
-    if (num >= 50)
+    if (num >= 100)
     {
         return false;
     }
@@ -72,6 +72,9 @@ int Classify::predit(std::vector<cv::Point2f> points, cv::Mat *img)
     // 计算最大概率
     auto max_prob_iter = std::max_element(output_data, output_data + output_size);
     float max_prob = *max_prob_iter;
-    std::cout << max_index << std::endl;
-    return max_index;
+    if(max_prob>0.95)
+    {
+        return max_index;
+    }
+    else return 8;
 }

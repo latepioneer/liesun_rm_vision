@@ -1,4 +1,5 @@
 #include "predictor.h"
+#include "tools.h"
 
 CoordPredictor::CoordPredictor() : KF(std::make_shared<cv::KalmanFilter>())
 {
@@ -11,24 +12,18 @@ CoordPredictor::CoordPredictor() : KF(std::make_shared<cv::KalmanFilter>())
     KF->init(DP, MP, CP);
     dt = 1; // 初始化时间间隔
     // 初始化状态转移矩阵 F(x,y,z,vx,vy,vz)
-    KF->transitionMatrix = (cv::Mat_<float>(DP, DP) << 1, 0, 0, dt, 0, 0,
-                            0, 1, 0, 0, dt, 0,
-                            0, 0, 1, 0, 0, dt,
-                            0, 0, 0, 1, 0, 0,
-                            0, 0, 0, 0, 1, 0,
-                            0, 0, 0, 0, 0, 1);
-
+    cv::setIdentity(KF->transitionMatrix, cv::Scalar::all(1));
     // 初始化测量矩阵 H
     KF->measurementMatrix = (cv::Mat_<float>(MP, DP) << 1, 0, 0, 0, 0, 0,
-                             0, 1, 0, 0, 0, 0,
-                             0, 0, 1, 0, 0, 0);
+                             0, 0, 1, 0, 0, 0,
+                             0, 0, 0, 0, 1, 0);
 
     // 初始化过程噪声协方差矩阵 Q
     KF->processNoiseCov = (cv::Mat_<float>(DP, DP) << 1, 0, 0, 0, 0, 0,
-                           0, 1, 0, 0, 0, 0,
+                           0, 100, 0, 0, 0, 0,
                            0, 0, 1, 0, 0, 0,
                            0, 0, 0, 100, 0, 0,
-                           0, 0, 0, 0, 100, 0,
+                           0, 0, 0, 0, 1, 0,
                            0, 0, 0, 0, 0, 100);
 
     // 初始化测量噪声协方差矩阵 R
@@ -43,27 +38,76 @@ CoordPredictor::CoordPredictor() : KF(std::make_shared<cv::KalmanFilter>())
     KF->statePost = cv::Mat::zeros(DP, 1, CV_32F);
 }
 
-cv::Mat CoordPredictor::predictAndUpdate(const cv::Mat &measurement)
+cv::Point3f CoordPredictor::predict(cv::Point3f coord, Gyropose gyro_pose)
 {
-    // 预测步骤
-    cv::Mat prediction = KF->predict();
-    // 更新步骤
-    cv::Mat residual = measurement - KF->measurementMatrix * prediction;
-    cv::Mat S = KF->measurementMatrix * KF->errorCovPost * KF->measurementMatrix.t() + KF->measurementNoiseCov;
-    cv::Mat K = KF->errorCovPost * KF->measurementMatrix.t() * S.inv();
-    cv::Mat updatedState = prediction + K * residual;
-    KF->errorCovPost = (cv::Mat::eye(DP, DP, CV_32F) - K * KF->measurementMatrix) * KF->errorCovPost;
-
-    // 更新状态
-    return KF->statePost = updatedState;
+    Eigen::Quaternionf  q(gyro_pose.q_0,gyro_pose.q_1,gyro_pose.q_2,gyro_pose.q_3);
+    world_coord = camera2world(q,coord,cam2gyro);
+    return predict(world_coord,gyro_pose.receive_time);
 }
 
-cv::Point3f CoordPredictor::predict(const cv::Point3f armor_xyz)
+
+cv::Point3f  CoordPredictor::predict(cv::Point3f coord,std::chrono::steady_clock::time_point timestamp)
 {
-    cv::Mat armor = (cv::Mat_<float>(3, 1) << armor_xyz.x, armor_xyz.y, armor_xyz.z);
-    cv::Mat armor_predict = this->predictAndUpdate(armor);
-    this->dataPoints.x = armor_predict.at<float>(0, 0);
-    this->dataPoints.y = armor_predict.at<float>(1, 0);
-    this->dataPoints.z = armor_predict.at<float>(2, 0);
-    return this->dataPoints;
+    cv::Mat correct_state;
+    std::chrono::duration<float> duration = timestamp - last_t;
+    float dt = duration.count();
+    //std::cout<<dt<<std::endl;
+    last_t = timestamp;
+    cv::Mat measurement = (cv::Mat_<float>(3, 1) << coord.x, coord.y, coord.z);
+    KF->transitionMatrix.at<float>(0,1) = dt;
+    KF->transitionMatrix.at<float>(2,3) = dt;
+    KF->transitionMatrix.at<float>(4,5) = dt;
+    KF->predict();
+    correct_state = KF->correct(measurement);
+    correct_coord = cv::Point3f(correct_state.at<float>(0, 0), correct_state.at<float>(2, 0), correct_state.at<float>(4, 0));
+    //std::cout<<correct_coord<<std::endl;
+    pitch_time = compensate(correct_coord,dt);
+    //std::cout<<"pitch_time"<<pitch_time<<std::endl;
+    cv::Point3f world_next = predictNextpoint(correct_state,pitch_time.y+dt);
+    return world_next;
+}
+
+cv::Point3f CoordPredictor::predictNextpoint(cv::Mat result,float dt)
+{
+    float t = dt;
+    float x = result.at<float>(0,0)+t*result.at<float>(1,0);
+    float y = result.at<float>(2,0)+t*result.at<float>(3,0);
+    float z = result.at<float>(4,0)+t*result.at<float>(5,0);
+    return cv::Point3f(x,y,z);
+}
+
+void CoordPredictor::initState(cv::Point3f coord,Gyropose gyro_pose)
+{
+    Eigen::Quaternionf  q(gyro_pose.q_0,gyro_pose.q_1,gyro_pose.q_2,gyro_pose.q_3);
+    world_coord = camera2world(q,coord,cam2gyro);
+    cv::Mat state = (cv::Mat_<float>(6, 1) << world_coord.x, 0, world_coord.y, 0, world_coord.z, 0);
+    KF->statePost = state;
+    last_t  = gyro_pose.receive_time;
+}
+
+
+double CoordPredictor::getflytime(double angle,cv::Point3f correct_spin,double T,double dt)
+{
+    double x = sqrt(correct_spin.x*correct_spin.x+correct_spin.y*correct_spin.y)/1000.0;
+    return (exp(k*x)-1.0)/(k*bullet_speed*cos(angle));
+}
+
+cv::Point2f CoordPredictor::compensate(cv::Point3f correct_spin,float dt)
+{
+    correct_spin -= gun2cam;
+    double dy,angle,y_actual;
+    double t_actual = 0.0;
+    double y_temp = correct_spin.z/1000.0;
+    double y = y_temp;
+    double x = sqrt(correct_spin.x*correct_spin.x+correct_spin.y*correct_spin.y)/1000.0;
+    for(int i = 0;i < iter_num;i++)
+    {
+        angle = atan2(y_temp,x);
+        t_actual = getflytime(angle,correct_spin,t_actual,dt);
+        y_actual = bullet_speed*t_actual*sin(angle)-0.5*g*t_actual*t_actual;
+        dy = y-y_actual;
+        y = y_temp-dy;
+        if(abs(dy)<0.001) break;
+    }
+    return cv::Point2f(angle/M_PI*180,t_actual);
 }

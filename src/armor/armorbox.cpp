@@ -1,32 +1,35 @@
 #include "armorbox.h"
 
-LightBlob::LightBlob(cv::RotatedRect rrect, double width, double height)
+void LightBlob::regularRotated(cv::RotatedRect &rect)
 {
-    this->rrect = rrect; // 保存传入的 RotatedRect 对象
-    this->height = height;
-    this->width = width;
-    cv::Point2f src_points[4];
-    rrect.points(src_points); // 获取旋转矩形的四个顶点坐标
-
-    // 清空 points 向量，确保没有残留数据
-    points.clear();
-
-    // 根据旋转矩形的角度选择如何添加顶点
-    if (rrect.angle > 45 && rrect.angle <= 90)
+    if (rect.size.width > rect.size.height)
     {
-        // 如果角度在 45 到 90 度之间，按顺序添加顶点
-        for (int i = 0; i < 4; i++)
-        {
-            points.push_back(src_points[i]);
-        }
+        float temp = rect.size.width;
+        rect.size.width = rect.size.height;
+        rect.size.height = temp;
+        rect.angle = rect.angle>=0.0f?rect.angle-90.0f:rect.angle+90.0f;
     }
-    else if (rrect.angle >= 0 && rrect.angle <= 45)
+    if(rect.angle<0) rect.angle+=180.0f;
+}
+
+LightBlob::LightBlob(cv::RotatedRect r)
+{
+    this->rrect = cv::RotatedRect(r);
+    regularRotated(rrect);
+    float x= rrect.center.x;
+    float y = rrect.center.y;
+    float angle = rrect.angle;
+    float height = rrect.size.height/2.0;
+    if(angle<90)
     {
-        // 如果角度在 0 到 45 度之间，添加顶点时将顺序偏移一个位置
-        for (int i = 0; i < 4; i++)
-        {
-            points.push_back(src_points[(i + 1) % 4]);
-        }
+        up = cv::Point(x+height*sin(angle/180.0*M_PI),y-height*cos(angle/180.0*M_PI)); 
+        down = cv::Point(x-height*sin(angle/180.0*M_PI),y+height*cos(angle/180.0*M_PI));
+
+    }
+    else{
+        angle = 180-angle;
+        up = cv::Point(x-height*sin(angle/180.0*M_PI),y-height*cos(angle/180.0*M_PI)); 
+        down = cv::Point(x+height*sin(angle/180.0*M_PI),y+height*cos(angle/180.0*M_PI));
     }
 }
 
@@ -54,24 +57,25 @@ std::vector<cv::Point2f> sortRotatedRectPoints(std::vector<cv::Point2f> points)
 
 ArmorBox::ArmorBox(LightBlob left, LightBlob right)
 {
-    this->light_Blobs->push_back(left);
-    this->light_Blobs->push_back(right);
+    light_Blobs.push_back(left);
+    light_Blobs.push_back(right);
     center = (left.rrect.center + right.rrect.center) / 2.0;
-    double length, width, angle;
+    double light_height, width, angle;
     width = sqrt(pow(right.rrect.center.x - left.rrect.center.x, 2) + pow(right.rrect.center.y - left.rrect.center.y, 2));
-    length = std::max(left.height, right.height); // 灯条长度
+    light_height = std::max(left.rrect.size.height, right.rrect.size.height); // 灯条长度
     angle = atan2(right.rrect.center.y - left.rrect.center.y, right.rrect.center.x - left.rrect.center.x) * 180 / CV_PI;
-    double height = 2 * length; // 装甲板宽度
-    rect = cv::RotatedRect(center, cv::Size(width - left.width / 2 - right.width / 2, height), angle);
+    light_rect = cv::RotatedRect(center, cv::Size(width, light_height), angle);
+    double armor_height = light_height*2;
+    light_rect = cv::RotatedRect(center, cv::Size(width, armor_height), angle);
     std::vector<cv::Point2f> points(4);
-    rect.points(points.data());
+    armor_rect.points(points.data());
     this->points = sortRotatedRectPoints(points);
     // 初步判断装甲板大小
-    if (width / height > 2.5)
+    if (width / light_height > 2.5)
         type = BIG_ARMOR;
     else
         type = SMALL_ARMOR;
-    box = cv::Rect(center - cv::Point(width / 2.0, height / 2.0), cv::Size(width, height));
+    box = cv::Rect(center - cv::Point(width / 2.0, light_height / 2.0), cv::Size(width, light_height));
 }
 
 bool ArmorBox::operator>(const ArmorBox &armor_2) const
@@ -95,8 +99,18 @@ bool ArmorBox::operator>(const ArmorBox &armor_2) const
 
     // 计算到图像中心的距离
     cv::Point2f center(cv::CAP_PROP_FRAME_WIDTH / 2.0, cv::CAP_PROP_FRAME_HEIGHT / 2.0);
-    float distance_score = calDistance(center, rect.center);
-    float distance_score2 = calDistance(center, armor_2.rect.center);
+    float distance_score = calDistance(center, light_rect.center);
+    float distance_score2 = calDistance(center, armor_2.light_rect.center);
 
     return distance_score < distance_score2;
+}
+
+std::vector<cv::Point2f> ArmorBox::get_lightpoints()
+{
+    std::vector<cv::Point2f> points;
+    points.push_back(light_Blobs[0].up);
+    points.push_back(light_Blobs[1].up);
+    points.push_back(light_Blobs[1].down);
+    points.push_back(light_Blobs[0].down);
+    return points;
 }

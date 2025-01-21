@@ -1,14 +1,64 @@
 #include "armordetector.h"
+#include "tools.h"
 
 double ArmorDetector::distance(cv::Point2f first, cv::Point2f second)
 {
     return sqrt(pow(first.x - second.x, 2) + pow(first.y - second.y, 2));
 }
 
-cv::Mat ArmorDetector::img_preprocess(cv::Mat *img, int color)
+void ArmorDetector::get_roi(float ratio)
+{
+    roi_rect.x = roi_temp.x - roi_temp.width/2 * (ratio*3.5-1);
+    roi_rect.y = roi_temp.y - roi_temp.height/2 * (ratio-1);
+    roi_rect.width = roi_temp.width * ratio*3.5;
+    roi_rect.height = roi_temp.height * ratio;
+    roi_rect &= cv::Rect(cv::Point2f(0,0),cv::Size(src.img.cols,src.img.rows));
+    roi = src.img(roi_rect);
+    offset = roi_rect.tl();
+}
+
+bool ArmorDetector::setRoi(Mat_time _src,cv::Rect &tracking_rect)
+{
+    _src.copyTo(src);
+    if(tracking_rect.empty())
+    {
+        if(roi_temp.empty())
+        {
+            roi = src.img;
+            offset = cv::Point(0,0);
+            lost_count = 0;
+            state = ArmorState::LOST;
+            return true;
+        }
+        if(lost_count < 3)
+        {
+            get_roi(roi_enlarge);
+            lost_count++;
+            state = ArmorState::FINDING;
+            return true;
+        }
+        else{
+            roi = src.img;
+            roi_rect = cv::Rect();
+            roi_temp  = cv::Rect();
+            offset = cv::Point(0,0);
+            lost_count = 0;
+            state = ArmorState::LOST;
+            return true;
+        }
+        
+    }
+    roi_temp = tracking_rect;
+    get_roi(roi_enlarge);
+    lost_count = 0;
+    cv::imshow("roi",roi);
+    return true;
+}
+
+cv::Mat ArmorDetector::img_preprocess(int color)
 {
     vector<cv::Mat> channels;
-    split(*img, channels);
+    split(roi, channels);
     cv::Mat img_B = channels.at(BLUE);
     cv::Mat img_G = channels.at(GREEN);
     cv::Mat img_R = channels.at(RED);
@@ -40,15 +90,14 @@ cv::Mat ArmorDetector::img_preprocess(cv::Mat *img, int color)
 
     // 闭运算来更新灯条
     morphologyEx(color_binary, color_binary, cv::MORPH_CLOSE, cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5)));
-
     // color_binary.copyTo(*prevbinary);
     return color_binary;
 }
 
-void ArmorDetector::find_light(cv::Mat binary)
+bool ArmorDetector::find_light(cv::Mat binary)
 {
     vector<vector<cv::Point>> contours;
-    findContours(binary, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE); // 寻找轮廓的最大四点
+    findContours(binary, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE,offset); // 寻找轮廓的最大四点
     for (int n = 0; n < contours.size(); n++)
     {
         if (contours[n].size() < 5)
@@ -68,29 +117,19 @@ void ArmorDetector::find_light(cv::Mat binary)
             continue; // 筛除大灯条
         // if (box.angle > 50 && box.angle < 130)continue;
 
-        LightBlob light = LightBlob(box, width, height);
+        LightBlob light = LightBlob(box);
         lightblobs.push_back(light);
     }
+    if(lightblobs.size() < 2)
+        return false;
+    return true; 
 }
 
 bool ArmorDetector::isCoupleLight(const LightBlob &light_blob_i, const LightBlob &light_blob_j)
 {
-    // float width = light_blob_j.rrect.center.x - light_blob_i.rrect.center.x;
-    // float height = (light_blob_j.rrect.size.height + light_blob_i.rrect.size.height) / 2.0;
-    // float angle_i = light_blob_i.rrect.angle > 90 ? 180.0 - light_blob_i.rrect.angle : light_blob_i.rrect.angle;
-    // float angle_j = light_blob_j.rrect.angle > 90 ? 180.0 - light_blob_j.rrect.angle : light_blob_j.rrect.angle;
-
-    // // 匹配灯条：角度差、长度比、高度差、组成的宽高比，滤除/\ \/
-    // if (fabs(angle_i - angle_j) > param.lights_angle_max_dif ||
-    //     max(light_blob_i.rrect.size.height, light_blob_j.rrect.size.height) / min(light_blob_i.rrect.size.height, light_blob_j.rrect.size.height) > param.lights_length_max_ratio ||
-    //     fabs(light_blob_i.rrect.center.y - light_blob_j.rrect.center.y) / (height * cos(angle_i / 180.0 * M_PI)) > param.lights_Y_max_ratio ||
-    //     width / height > param.armor_width_height_max_ratio ||
-    //     width / height < param.armor_width_height_min_ratio ||
-    //     (fabs(light_blob_i.rrect.angle - light_blob_j.rrect.angle) >= 90 && fabs(light_blob_i.rrect.angle - light_blob_j.rrect.angle) < 160)) // 滤除 /\ 和 \/ 灯条
-    //     return false;
     double dis = distance(light_blob_i.rrect.center, light_blob_j.rrect.center); // 两个灯条的中心位置距离
     double dif_Y = light_blob_i.rrect.center.y - light_blob_j.rrect.center.y;    // 两个灯条的中心Y距离
-    double hight = (light_blob_j.height + light_blob_i.height) / 2;              // 平均灯条高度
+    double hight = (light_blob_j.rrect.size.height + light_blob_i.rrect.size.height) / 2;              // 平均灯条高度
     float aspectRatio = dis / hight;
     if (aspectRatio < light_min_ch_ratio)
         return false;
@@ -98,14 +137,16 @@ bool ArmorDetector::isCoupleLight(const LightBlob &light_blob_i, const LightBlob
         return false;
     if (dif_Y > 60)
         return false;
-    if (abs(light_blob_i.rrect.angle - light_blob_j.rrect.angle) > light_angle_dif) // 两个灯条的旋转偏移量
-        return false;
+    // if (abs(light_blob_i.rrect.angle - light_blob_j.rrect.angle) > light_angle_dif) // 两个灯条的旋转偏移量
+    // {
+    //     cout<<3<<endl;
+    //     return false;
+    // }
     return true;
 }
 
-bool ArmorDetector::matchArmorBoxes(LightBlobs &light_blobs, ArmorBoxes &armor_boxes, cv::Mat *img)
+bool ArmorDetector::matchArmorBoxes(LightBlobs &light_blobs, ArmorBoxes &armor_boxes)
 {
-    // armor_boxes.clear();
     if (lightblobs.size() < 2)
         return false;
     auto cmp = [](LightBlob a, LightBlob b) -> bool
@@ -122,8 +163,9 @@ bool ArmorDetector::matchArmorBoxes(LightBlobs &light_blobs, ArmorBoxes &armor_b
                 continue;
             // if (isBadArmor(i, j, light_blobs))
             //     continue;
-
-            armor_boxes.push_back(ArmorBox(light_blobs[i], light_blobs[j]));
+            ArmorBox armor(light_blobs[i], light_blobs[j]);
+            armor_boxes.push_back(armor);
+            
         }
     }
 
@@ -132,118 +174,152 @@ bool ArmorDetector::matchArmorBoxes(LightBlobs &light_blobs, ArmorBoxes &armor_b
         return false;
     }
 
-    getArmorNum(armor_boxes, img);
+    //getArmorNum(armor_boxes);
+    return true;
 }
 
-void ArmorDetector::getArmorNum(ArmorBoxes &armor_boxes, cv::Mat *img)
+void ArmorDetector::getArmorNum(ArmorBoxes &armor_boxes)
 {
-    for (auto armor : armorboxes)
-    {
-        armor.id = classify.predit(armor.points, img);
-    }
+    ArmorBoxes temp_armor_boxes;
+for (auto& armor : armor_boxes)  // 使用引用来修改原始元素
+{
+    armor.id = classify.predit(armor.points, &roi);  // 直接修改原始 'armor' 的 id
+    cout << armor.id << "    ";  // 输出的是原始 'armor' 的 id
+    if (armor.id == 3)  // 如果 'armor' 的 id 为 3，加入 temp_armor_boxes
+        temp_armor_boxes.push_back(armor);
+}
+cout << endl;
+if (!temp_armor_boxes.empty())
+    armor_boxes = std::move(temp_armor_boxes);  // 只保留 id 为 3 的元素
+else
+    armor_boxes.clear();  // 如果 temp_armor_boxes 为空，清空 armor_boxes
+
+    
 }
 
-void ArmorDetector::getBestArmor(ArmorBoxes &boxes)
+bool ArmorDetector::getBestArmor(ArmorBoxes &boxes)
 {
     auto cmp = [](ArmorBox a, ArmorBox b)
     {
         return a > b;
     };
-
     sort(boxes.begin(), boxes.end(), cmp);
+    
+    return true;
 }
 
 bool ArmorDetector::ifOldArmor()
 {
     if (last_target.box.empty() || ArmorState::LOST)
         return false;
-    if (lost_count)
-        ;
+    cv::Point2f delta = target.light_rect.center - last_target.light_rect.center;
+    float distance = sqrt(delta.x * delta.x + delta.y * delta.y);
+    if(last_target.id == target.id||distance/target.box.height<15)
+        return true;
+    return false;
 }
 
-void ArmorDetector::find_armor(cv::Mat *img)
-{
-    // if (lightblobs.size() < 2)
-    //     return;
-    // for (int i = 0; i < lightblobs.size(); i++)
-    //     for (int j = i + 1; j < lightblobs.size(); j++)
-    //     {
-    //         double dis = distance(lightblobs[i].rrect.center, lightblobs[j].rrect.center); // 两个灯条的中心位置距离
-    //         double dif_Y = lightblobs[i].rrect.center.y - lightblobs[j].rrect.center.y;    // 两个灯条的中心Y距离
-    //         double hight = (lightblobs[j].height + lightblobs[i].height) / 2;              // 平均灯条高度
-    //         float aspectRatio = dis / hight;
-    //         if (aspectRatio < light_min_ch_ratio)
-    //             continue;
-    //         if (aspectRatio > light_max_ch_ratio)
-    //             continue;
-    //         if (dif_Y > 60)
-    //             continue;
-    //         // if (abs(lightblobs[i].rrect.angle - lightblobs[j].rrect.angle) > light_angle_dif)continue;//两个灯条的旋转偏移量
-    //         ArmorBox rect_armor = ArmorBox(lightblobs[i], lightblobs[j]);
-    //         armorboxes.push_back(rect_armor);
-    //     }
-    // lightblobs.clear();
-    if (!matchArmorBoxes(lightblobs, armorboxes, img))
-        return;
-    getBestArmor(armorboxes);
-    if (ifOldArmor())
-        state = ArmorState::SHOOT;
-    else
-        state = ArmorState::FIRST;
-    last_target = armorboxes[0];
-}
 
 cv::Point3f ArmorDetector::pnp(ArmorBox armor)
 {
     vector<cv::Point3f> Points3D;
     if (armor.type == BIG_ARMOR)
     {
-        Points3D.push_back(cv::Point3f(-12, 6, 0));
-        Points3D.push_back(cv::Point3f(12, 6, 0));
-        Points3D.push_back(cv::Point3f(12, -6, 0));
-        Points3D.push_back(cv::Point3f(-12, -6, 0));
+        Points3D.push_back(cv::Point3f(-24, 12, 0));
+        Points3D.push_back(cv::Point3f(24, 12, 0));
+        Points3D.push_back(cv::Point3f(24, -12, 0));
+        Points3D.push_back(cv::Point3f(-24, -12, 0));
+        cout<<"big"<<endl;
     }
     else
     {
-        Points3D.push_back(cv::Point3f(-0.12, 0.06, 0));
-        Points3D.push_back(cv::Point3f(0.12, 0.06, 0));
-        Points3D.push_back(cv::Point3f(0.12, -0.06, 0));
-        Points3D.push_back(cv::Point3f(-0.12, -0.06, 0));
-        // Points3D.push_back(cv::Point3f(-7, 3, 0));
-        // Points3D.push_back(cv::Point3f(7, 3, 0));
-        // Points3D.push_back(cv::Point3f(7, -3, 0));
-        // Points3D.push_back(cv::Point3f(-7, -3, 0));
+        // Points3D.push_back(cv::Point3f(-12, 6, 0));
+        // Points3D.push_back(cv::Point3f(12, 6, 0));
+        // Points3D.push_back(cv::Point3f(12, -6, 0));
+        // Points3D.push_back(cv::Point3f(-12, -6, 0));
+        Points3D.push_back(cv::Point3f(-135.0/2.0, 55.0/2.0, 0));
+        Points3D.push_back(cv::Point3f(135.0/2.0, 55.0/2.0, 0));
+        Points3D.push_back(cv::Point3f(135.0/2.0, -55.0/2.0, 0));
+        Points3D.push_back(cv::Point3f(-135.0/2.0, -55.0/2.0, 0));
     }
     cv::Mat rvec = cv::Mat::zeros(3, 1, CV_64FC1);
     cv::Mat tvec = cv::Mat::zeros(3, 1, CV_64FC1);
-    solvePnP(Points3D, armor.points, Camera().cameraMatrix, Camera().distCoeffs, rvec, tvec, false, cv::SOLVEPNP_AP3P);
+    solvePnP(Points3D, armor.get_lightpoints(), Camera().cameraMatrix, Camera().distCoeffs, rvec, tvec, false, cv::SOLVEPNP_ITERATIVE);
     cv::Point3f points((float)tvec.ptr<double>(0)[0], (float)tvec.ptr<double>(0)[1], (float)tvec.ptr<double>(0)[2]);
     // cout << "x:" << points.x << "     y:" << points.y << "      z:" << points.z << endl;
     return points;
 }
 
-cv::Point3f camera_to_world(Eigen::Quaternionf q1, cv::Point3f point, cv::Point3f trans_offset = cv::Point3f(-0.3, 9, 27.9))
+cv::Point2f ArmorDetector::getPitchYaw(ArmorBox temp_target,Gyropose gyro_pose)
 {
-    // point += trans_offset;
-    Eigen::Quaternionf p(0, point.z, -point.x, -point.y);
-    Eigen::Quaternionf result = q1 * p * q1.inverse();
-    return cv::Point3f(result.x(), result.y(), result.z());
+    cv::Point3f world_point = pnp(temp_target);
+    //cout<<world_point<<endl;
+    Eigen::Quaternionf  q(gyro_pose.q_0,gyro_pose.q_1,gyro_pose.q_2,gyro_pose.q_3);
+    cv::Point3f world_coord = camera2world(q,world_point,predictor.cam2gyro);
+    //cout<<world_coord<<endl;
+    if(state == ArmorState::FIRST)
+        predictor.initState(world_point,gyro_pose);
+    cv::Point3f world_predict = predictor.predict(world_point,gyro_pose);
+    //cout<<"world_predict"<<world_predict<<endl;
+    last_world_point = predictor.world_coord;
+    return calPredict(world_predict,gyro_pose);
 }
 
-void ArmorDetector::getPitchYaw(cv::Point3f world_point, Gyropose gyro_pose)
+cv::Point2f ArmorDetector::getPitchYaw(cv::Point3f world_point,Gyropose gyro_pose)
 {
-    /// cv::Point3f real_point = camera_to_world(Eigen::Quaternionf(gyro_pose.q_0, gyro_pose.q_1, gyro_pose.q_2, gyro_pose.q_3), world_point);
-    yaw = atan2(world_point.x, world_point.z) * 180.0 / CV_PI;
-    pitch = atan2(world_point.y, world_point.z) * 180.0 / CV_PI;
-    // cout << "real:" << real_point.x << "     " << real_point.y << "      " << real_point.z << endl;
+    cv::Point3f world_predict = predictor.predict(world_point,gyro_pose.receive_time);
+    return calPredict(world_predict,gyro_pose);
+}
 
-    // yaw = atan(real_point.x / real_point.z) * 180.0 / CV_PI;
-    // pitch = atan(real_point.z / sqrt(real_point.x * real_point.x + real_point.y * real_point.y)) * 180.0 / CV_PI;
+cv::Point2f ArmorDetector::calPredict(cv::Point3f world_predict,Gyropose gyro_pose)
+{
+    Eigen::Quaternionf  q(gyro_pose.q_0,gyro_pose.q_1,gyro_pose.q_2,gyro_pose.q_3);
+    cv::Point3f cp_predict = world2camera(q,world_predict,predictor.cam2gyro);
+    //cout<<"cp_predict"<<cp_predict<<endl;
+    float yaw = atan(cp_predict.x/cp_predict.z)*180/CV_PI-0.3;
+    float cp_pitch = atan(cp_predict.y/cp_predict.z)*180/CV_PI;
+    float targetPitch = atan(world_predict.z/sqrt(world_predict.x*world_predict.x+world_predict.y*world_predict.y))*180/CV_PI;
+    float Pitch = cp_pitch - predictor.pitch_time.x+targetPitch+1;
+    return cv::Point2f(Pitch,yaw);
+}
 
-    // yaw = atan2(real_point.x, real_point.y) * 180.0 / CV_PI;
-    // pitch = atan2(real_point.z, real_point.y) * 180.0 / CV_PI;
+bool ArmorDetector::findArmorBox(ArmorBox &box)
+{
+    box = ArmorBox();
+    target = ArmorBox();
+    armorboxes.clear();
+    lightblobs.clear();
+    cv::Mat binary = img_preprocess(RED);
+    //cv::imshow("binary",binary);
+    if(!find_light(binary))
+        return false;
+    if(!matchArmorBoxes(lightblobs,armorboxes))
+        return false;
+    getBestArmor(armorboxes);
+    target = armorboxes[0];
+    
+    box = armorboxes[0];
+    if(ifOldArmor()) state = ArmorState::SHOOT;
+    else state = ArmorState::FIRST;
+    last_target = target;
+    return true;
+}
 
-    cout << "yaw:" << yaw << "     pitch:" << pitch << endl;
-    // float targetPitch = atan(world_point.z / sqrt(world_point.x * world_point.x + world_point.y * world_point.y)) * 180.0 / CV_PI;
-    // pitch = cp_pitch - predictor.pitch_time.x + targetPitch + 1.0;
+
+bool ArmorDetector::run(Mat_time _src,cv::Point2f &pitch_yaw)
+{
+    ArmorBox temp_target;
+    setRoi(_src,target.box);
+    if(!findArmorBox(temp_target))
+    {
+        if(state!=ArmorState::LOST)
+        {
+            pitch_yaw = getPitchYaw(last_world_point,_src.gyro_pose);
+        }
+        return true;
+    }
+    //cout<<_src.gyro_pose.q_0<<" "<<_src.gyro_pose.q_1<<" "<<_src.gyro_pose.q_2<<" "<<_src.gyro_pose.q_3<<endl;
+    pitch_yaw = getPitchYaw(temp_target,_src.gyro_pose);
+    cout<<pitch_yaw<<endl;
+    return true;
 }

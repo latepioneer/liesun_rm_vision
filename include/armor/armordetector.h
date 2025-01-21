@@ -5,6 +5,7 @@
 #include "camera.h"
 #include "Mat_time.h"
 #include "classify.h"
+#include "predictor.h"
 #include <Eigen/Dense>
 
 #define red_blue_diff 60
@@ -28,27 +29,25 @@ class ArmorDetector
 private:
     Classify classify;
 
+    float roi_enlarge = 3;
+    int lost_count = 0;
+    cv::Rect roi_rect;///roi区域矩阵
+    cv::Rect roi_temp;//暂存上一次识别装甲板的roi
+    cv::Point offset;
+
+    cv::Point3f last_world_point;
 public:
     float yaw, pitch;
     LightBlobs lightblobs;
     ArmorBoxes armorboxes;
     ArmorState state = ArmorState::LOST;
-    /**
-     * @brief 记录丢失的帧数
-     */
-    int lost_count;
-    /**
-     * @brief 记录跟随的帧数
-     */
-    int lock_count;
-    /**
-     * @brief 选取roi区域，加快处理图像的时间
-     */
-    cv::Mat ROI;
-    /**
-     * @brief 记录上一次锁定的装甲板
-     */
-    ArmorBox last_target;
+
+    ArmorBox target;//目标装甲板
+    ArmorBox last_target;//上一次目标装甲板
+    cv::Mat roi;
+    Mat_time src;
+
+    CoordPredictor  predictor;
 
 private:
     /**
@@ -58,7 +57,7 @@ private:
      * @return
      */
     bool isCoupleLight(const LightBlob &light_blob_i, const LightBlob &light_blob_j);
-    void getBestArmor(ArmorBoxes &armorboxes);
+    bool getBestArmor(ArmorBoxes &armorboxes);
     /**
      * @brief 计算灯条中心的距离
      * @param 左灯条
@@ -70,21 +69,29 @@ private:
      */
     bool ifOldArmor();
 
+    void get_roi(float ratio);
+    bool setRoi(Mat_time _src, cv::Rect &roi);
+
 public:
-    cv::Mat img_preprocess(cv::Mat *img, int color); // 图像预处理
-    void find_light(cv::Mat binary);                 // 寻找灯条
+    cv::Mat img_preprocess(int color); // 图像预处理
+    bool find_light(cv::Mat binary);                 // 寻找灯条
     /**
      * @brief 灯条与装加板相匹配
      * @param[out] 灯条集合
      * @param[out] 装甲板集合
      * @return 1为匹配成功，0为失败
      */
-    bool matchArmorBoxes(LightBlobs &lightblobs, ArmorBoxes &armorboxes, cv::Mat *img);
-    void find_armor(cv::Mat *img); // 寻找合适的装甲板
+    bool matchArmorBoxes(LightBlobs &lightblobs, ArmorBoxes &armorboxes);
     cv::Point3f pnp(ArmorBox armor);
+    void getArmorNum(ArmorBoxes &armor_boxes);
 
-    void getPitchYaw(cv::Point3f world_point, Gyropose gyro_pose);
-    void getArmorNum(ArmorBoxes &armor_boxes, cv::Mat *img);
+    bool run(Mat_time _src,cv::Point2f &pitch_yaw);
+
+    bool findArmorBox(ArmorBox &box);
+
+    cv::Point2f getPitchYaw(ArmorBox temp_target,Gyropose gyro_pose);
+    cv::Point2f getPitchYaw(cv::Point3f world_point,Gyropose gyro_pose);
+    cv::Point2f calPredict(cv::Point3f world_predict,Gyropose gyro_pose);
+
 };
 
-cv::Point3f camera_to_world(Eigen::Quaternionf q1, cv::Point3f point, cv::Point3f trans_offset);

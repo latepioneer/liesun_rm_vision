@@ -218,6 +218,28 @@ int comm_service::CommRecv(ReceivePacket &rcv_buf)
     return rcv_buf.check();
 }
 
+int comm_service::CommRecv(uint8_t *rcv_buf,float *q)
+{
+    if (!commIsOpen())
+        return false; // 如果串口未打开，则返回-1
+    //std::cout<<"1"<<std::endl;
+    int len = 0;   // 每次读取的数据长度
+    len = read(m_fd, rcv_buf, 11);
+    //std::cout<<len<<std::endl;
+    if (len == -1)
+    {
+        tcflush(m_fd, TCIFLUSH);
+        return false;
+    }
+    if(rcv_buf[0] != 0x55&&rcv_buf[1] != 0x59)
+        return false;
+    q[0] = (int16_t)(rcv_buf[3] << 8 | rcv_buf[2]) / 32768.0f;
+    q[1] = (int16_t)(rcv_buf[5] << 8 | rcv_buf[4]) / 32768.0f;
+    q[2] = (int16_t)(rcv_buf[7] << 8 | rcv_buf[6]) / 32768.0f;
+    q[3] = (int16_t)(rcv_buf[9] << 8 | rcv_buf[8]) / 32768.0f;
+    return true;
+}
+
 int comm_service::CommSend(const SendPacket *send_buf)
 {
     if (!commIsOpen())

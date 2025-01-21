@@ -5,7 +5,7 @@ import onnxruntime as ort
 ort_session = ort.InferenceSession("saved_model/my_model.onnx")
 
 # 使用 OpenCV 处理单张图片
-img = cv2.imread('./48.jpg', cv2.IMREAD_GRAYSCALE)  # 使用 OpenCV 读取灰度图
+img = cv2.imread('armor_classify/48.jpg', cv2.IMREAD_GRAYSCALE)  # 使用 OpenCV 读取灰度图
 cv2.imshow("1",img);
 cv2.waitKey(1000);
 img = cv2.resize(img, (28, 20))  # 调整大小 (宽28, 高20)
